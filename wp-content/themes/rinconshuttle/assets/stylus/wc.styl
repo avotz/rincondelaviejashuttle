@@ -1,0 +1,164 @@
+.woocommerce-breadcrumb
+.product_meta
+    display none
+
+.woocommerce #content div.product .woocommerce-tabs, .woocommerce div.product .woocommerce-tabs, .woocommerce-page #content div.product .woocommerce-tabs, .woocommerce-page div.product .woocommerce-tabs
+    float: none;
+    width: 100%;
+    background-color: rgba(255,255,255,.8)
+    // .wc-bookings-booking-form
+    //     background-color: rgba(255,255,255,.8)
+
+@media screen and (min-width:768px)
+    .woocommerce #content div.product .woocommerce-tabs, .woocommerce div.product .woocommerce-tabs, .woocommerce-page #content div.product .woocommerce-tabs, .woocommerce-page div.product .woocommerce-tabs
+        float: left;
+        width: 45%;
+        clear: none;
+        padding: .5rem
+        //margin-top: 5rem
+        margin-left: 8rem
+
+.woocommerce div.product .woocommerce-tabs .panel
+    padding: 0 1rem
+@media screen and (min-width:768px)
+    .woocommerce div.product .woocommerce-tabs .panel
+        padding: 0
+
+.woocommerce-tabs ul.tabs, .woocommerce-tabs ul.tabs
+    display: none !important;
+
+.woocommerce div.product
+    margin-top: 0
+    height: 100vh;
+    
+    .product-header
+        padding: 2rem 2rem
+        color cafe
+    .product-inner
+        background-color: white
+.woocommerce div.product div.summary
+    clear: both;
+    float:none;
+    padding-top: 4rem;
+    padding-left: 8.5rem;
+
+.woocommerce div.product p.price, .woocommerce div.product span.price
+    font-size: 2rem
+    font-weight: 900
+    color celeste
+
+.woocommerce #respond input#submit.alt.disabled, .woocommerce #respond input#submit.alt.disabled:hover, .woocommerce #respond input#submit.alt:disabled, .woocommerce #respond input#submit.alt:disabled:hover, .woocommerce #respond input#submit.alt:disabled[disabled], .woocommerce #respond input#submit.alt:disabled[disabled]:hover, .woocommerce a.button.alt.disabled, .woocommerce a.button.alt.disabled:hover, .woocommerce a.button.alt:disabled, .woocommerce a.button.alt:disabled:hover, .woocommerce a.button.alt:disabled[disabled], .woocommerce a.button.alt:disabled[disabled]:hover, .woocommerce button.button.alt.disabled, .woocommerce button.button.alt.disabled:hover, .woocommerce button.button.alt:disabled, .woocommerce button.button.alt:disabled:hover, .woocommerce button.button.alt:disabled[disabled], .woocommerce button.button.alt:disabled[disabled]:hover, .woocommerce input.button.alt.disabled, .woocommerce input.button.alt.disabled:hover, .woocommerce input.button.alt:disabled, .woocommerce input.button.alt:disabled:hover, .woocommerce input.button.alt:disabled[disabled], .woocommerce input.button.alt:disabled[disabled]:hover,
+.woocommerce #respond input#submit.alt, .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt
+    background-color: naranja
+
+
+.woocommerce #respond input#submit.alt:hover, .woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover
+    background-color: celeste
+
+.woocommerce div.product div.images .woocommerce-product-gallery__image:nth-child(n+2)
+    padding: .25rem;
+
+.carousel-gallery .woocommerce-product-gallery__image
+    padding: .25rem;
+    width: 25%
+    display inline-block
+
+.post-type-archive-product
+.related
+    padding-left 1rem;
+    padding-right 1rem;
+    text-align: center;
+    h2 
+        margin-bottom: 1rem
+    .products
+        display flex
+        flex-wrap wrap
+        justify-content center//space-between
+        li 
+            margin: .2rem !important
+            .ajax_add_to_cart
+            .add_to_cart_button
+                display: none
+            .woocommerce-loop-product__title
+                position: absolute;
+                bottom: 5%;
+                left 0
+                right: 0
+                padding .1rem 1rem
+                text-align: center;
+                color: #f0f0f0;
+                background-color verde
+                text-transform uppercase
+                font-weight 900
+                font-size 1.2rem
+    .price 
+        display none !important
+
+.post-type-archive-product
+    text-align: left;
+    .woocommerce-products-header
+        padding: 2rem 0
+
+@media screen and (min-width:1000px)
+	.related
+		padding-left 1rem//15%
+		padding-right 1rem //15%
+
+.book_tab
+    background-color: naranja !important
+    &.active 
+        background-color: #ce8525 !important
+        &:before
+            box-shadow: 2px 2px 0 #ce8525 !important;
+        &:after
+            box-shadow: -2px 2px 0 #ce8525 !important;
+    &:after
+        box-shadow: -2px 2px 0 naranja !important;
+
+    a 
+        color:white !important
+
+.product-siderbar-top
+    //text-align: center
+    //margin-bottom: 1rem
+    #custom_html-2
+        display none
+    .widget
+    .heateor_sss_sharing_container
+        display inline-block
+        padding: 0 0 0 0
+        vertical-align: middle
+    .widget_ssba_widget
+    .heateor_sss_sharing_container
+        padding-top: 10px
+
+@media screen and (min-width:540px)
+    .product-siderbar-top
+        position: static
+        right 0
+        top 0
+        text-align: left
+        margin-bottom: 0
+        .widget
+        .heateor_sss_sharing_container
+            padding: 0 .5rem
+        .widget_ssba_widget
+        .heateor_sss_sharing_container
+            padding-top: 30px
+        #custom_html-2
+            display inline-block
+
+@media screen and (min-width:1280px)
+    .product-siderbar-top
+        position: absolute
+
+.woocommerce .cart-collaterals .cart_totals, .woocommerce-page .cart-collaterals .cart_totals 
+    > h2
+        display none
+
+.woocommerce-checkout-review-order-table .product-total .woocommerce-Price-amount
+    display none
+
+.product_title 
+    color: white
+    text-shadow: 1px 1px 2px rgba(0,0,0,.5)

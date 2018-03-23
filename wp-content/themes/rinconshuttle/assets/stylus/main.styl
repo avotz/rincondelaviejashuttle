@@ -1,0 +1,323 @@
+@import "nib"
+@import "normalize.styl"
+@import "icons.styl"
+@import "basic.styl"
+@import "wc.styl"
+
+html,body
+	position: relative;
+	color #3b3b3b
+	//width: 100%;
+	//height: 100%;
+	//overflow: hidden;
+	//overflow-y: auto;
+
+body
+	background-image: url('./img/pattern.png'),url('./img/banner.jpg');
+	background-size auto, cover
+	background-repeat repeat, no-repeat
+	background-position center center
+	background-attachment: fixed
+
+	&.nav-is-open
+		.nav-container 
+			left 0
+			right 0
+			width 100%
+			visibility visible
+			opacity 1
+			z-index 100
+		.nav-menu 
+			li 
+				transform: translateX(0);
+				opacity 1
+		
+		.nav-btn-menu
+			.fa-bars
+				&:before
+					content '\f00d'
+	&.home 
+		background-color #444
+		.header-logo
+			display none
+
+
+.nav
+	&-container 
+		position fixed
+		background-color rgba(verde,.75)
+		left 0
+		top 0
+		right 0
+		bottom 0
+		width 100%
+		z-index 100
+		visibility hidden
+		opacity 0
+		overflow hidden
+		transition all .85s cubic-bezier(.4,0,.2,1)
+		
+			
+	&-menu
+		position relative 
+		background-color transparent
+		width 100%
+		left 0
+		color white
+		text-align center
+		//padding-left 40px
+		padding-top 80px
+		padding-bottom 80px
+		li
+		&-item
+			display block
+			line-height 3rem
+			//transform: translateX(-100%)
+			transition: transform .45s cubic-bezier(.4,0,.2,1),opacity .3s cubic-bezier(.4,0,.2,1);
+			opacity 0
+			/*&:nth-child(1)
+				transition-delay .19s
+			&:nth-child(2)
+				transition-delay .23s
+			&:nth-child(3)
+				transition-delay .27s
+			&:nth-child(4)
+				transition-delay .31s
+			&:nth-child(5)
+				transition-delay .35s
+			&:nth-child(6)
+				transition-delay .39s*/
+			
+		a
+		&-link
+			display block
+			color white
+			font-weight 700
+			font-size 1.6rem
+			&:hover
+				color verde
+				margin-left 1rem
+			
+	&-btn-menu
+		background-color transparent
+		top 15px
+		left 15px
+		z-index 902
+		border none
+		color white
+		font-size 2rem//2.8rem
+		outline none
+		transition all .3s ease
+		.fa-bars
+			&:before
+				transition all .3s ease
+
+
+.header
+	position absolute
+	left 0
+	right 0
+	width 100%
+	background-color transparent
+	top 0
+	z-index 900
+	height 75px
+	transition all .5s ease
+	
+	&-logo
+		z-index: 300;
+		position absolute
+		color white
+		font-weight 500
+		font-size 2rem
+		text-align center
+		transition all .3s ease
+		padding 1rem 15px //2.65rem 0
+		//max-width 33.33%
+		//background-color #4a4a4a
+
+	&-right
+		position absolute
+		right 0
+		top 0
+	&-btn-menu
+		//background #4a4a4a
+		text-align center
+		padding 1rem 1rem
+	&-contact
+		.btn
+			padding 1.4rem 1.5rem
+			margin-bottom 0
+			//background verde
+			&:hover
+				background #00642f
+			i 
+				//padding-right .5rem
+				font-size 1.5rem
+			span
+				opacity 0
+				display none
+			
+		
+
+@media screen and (min-width: 768px)
+	.header
+		&-logo
+			padding 1rem 15px //2.65rem 0
+			max-width 100px
+			position absolute
+			transform: translateX(0);
+
+	.fp-viewing-0
+		.header
+			&-logo
+				color white
+				//left 4rem
+				transform translateX(60px)
+			&-btn-menu
+				padding 1rem 2rem
+			&-contact
+				.btn
+					padding 1.4rem 2rem
+					i 
+						padding-right .5rem
+					span
+						display inline-block
+						opacity 1
+				
+		
+	.nav
+		&-btn-menu
+			top 15px
+			left 60px
+		&-menu
+			padding-top: 6.5rem;
+			padding-bottom: 2.5rem;
+			//padding-left: 7.5rem;
+			li 
+				line-height 5rem
+			a
+				font-size 3.75rem
+	
+		
+@media screen and (min-width: 1000px)
+	.nav
+		&-aside
+			left auto
+			right 0
+			bottom 0
+			top 0
+			padding 0rem 4rem
+			.social
+				margin-top 6rem
+				li 
+					display block
+					
+					a 
+						color white
+						
+						font-size 1.5rem
+						padding 1.5rem 1rem
+			.copy
+				bottom 2rem 
+				left auto
+	
+
+
+.banner
+	background-image: url('./img/pattern.png'),url('./img/banner.jpg');
+	background-size auto, cover
+	background-repeat repeat, no-repeat
+	background-position center center
+	height 100vh
+	width: 100%;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	top: 0;
+	z-index: 1
+	&-logo 
+		background-color white
+		display inline-block
+		border-radius 50%
+		width 170px
+		margin-bottom 1rem
+	&-container
+		height 100vh
+		display flex
+		justify-content center
+		align-items center
+	&-info
+		text-align center
+		max-width 750px
+		color white
+	h1 
+		margin-bottom 2rem
+		color white
+		font-size 3rem
+	p 
+		font-size 1.5rem
+
+.menu-left
+	position absolute
+	left 0
+	top 12%
+	box-shadow 1px 1px 5px rgba(0,0,0,.15)
+	border-radius 0 5px 5px 0
+	background-color white
+	z-index: 2
+	li 
+		border-bottom 1px solid #e3e3e3
+		&:last-child
+			border none
+	a 
+		display block
+		padding 1rem .5rem
+		color verde
+		text-align center
+		font-size: 13px
+		&:hover
+			color celeste
+			background-color #eeeeee
+
+		i 
+			display block
+			font-size 1.2rem
+		span
+			display inline-block
+			color #3a2b14
+
+.main
+	height 100vh
+	padding-top: 5rem;
+
+article.page
+	margin-left: 8.5rem
+	padding: .5rem
+	max-width 700px
+	.entry-header
+		//margin-bottom: 1rem
+		background: verde
+		padding: 1rem .5rem
+		h1
+			color: white
+			
+	.entry-content
+		background-color: rgba(255,255,255,.8)
+		padding: .5rem
+
+.woocommerce-page
+	article.page
+		max-width 100%
+body.page
+body.single
+	.banner
+		z-index -1 
+
+body.home
+	.banner
+		z-index 1 
+
+
+
+

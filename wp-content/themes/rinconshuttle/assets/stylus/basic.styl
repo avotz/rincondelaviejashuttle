@@ -1,0 +1,279 @@
+amarillo = #FEDD49
+naranja = #F6902F
+rojo = #EC354B
+verde = #959C1E
+celeste = #64b4dc
+
+
+*
+	box-sizing border-box
+*
+	&:after
+	&:before
+		box-sizing border-box
+html
+	background-color #FFF
+body
+	font-family 'Lato', sans-serif
+	font-size 100%
+	line-height 30px
+
+
+
+ul
+	margin 0
+	padding 0
+	
+
+a
+	text-decoration none
+	transition all .5s ease
+	color celeste
+p 
+	margin-top 0
+	margin-bottom 1.25rem
+h1
+h2
+h3
+h4
+h5
+	margin-top 0
+	font-weight 400
+h1
+h2
+	font-weight: 900;
+	font-size: 32px;
+	color: #261e1e;
+	//text-align: center;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 0;
+@media screen and (min-width:900px)
+	h1
+	h2
+		font-size: 42px;
+
+img
+	max-width 100%
+	height auto
+	
+.striped
+	position: relative;
+	text-align: center;
+	text-transform: uppercase;
+	z-index: 2;
+	letter-spacing: 0.1em;
+	margin: 0 0 30px 0;
+	line-height: 38px;
+	&:after
+		color: verde;
+		content: attr(data-text);
+		left: 0.4%;
+		position: absolute;
+		width: 99.6%;
+		top: 1px;
+		z-index: -1;
+		text-align: center;
+		opacity: 0.7;
+	&.clipped
+		&:after
+			background: url(./img/hl_bg.png);
+			-webkit-background-clip: text;
+			color: transparent;
+			width: 99.8%;
+			left: 0.5%;
+			top: 3px;
+			opacity: 1;
+			-webkit-backface-visibility: hidden;
+
+.right
+	right 0
+.left
+	left 0
+.alignright
+.alignleft
+	width 100%
+	margin-bottom .5rem
+@media screen and (min-width:1001px)
+	.alignright
+		float right
+		width 350px
+		height 300px
+		margin-left .5rem
+	.alignleft
+		float left
+		width 350px
+		height 300px
+		margin-right .5rem
+.txt-center
+	text-align center
+.hidden
+	display none 
+.no-padding
+	padding-left 0 !important
+	padding-right 0 !important
+.overflow
+	overflow hidden
+		
+.transparent
+	background-color transparent
+input[type="number"]
+input[type="text"]
+input[type="email"]
+input[type="date"]
+input[type="tel"]
+input[type="time"]
+input[type="search"]
+input[type="url"]
+select
+textarea
+	height: 36px;
+	width 100%
+	background-color white !important
+	border 1px solid #aaa
+textarea
+	height 80px
+section.error-404
+	padding-top 6rem
+	text-align center
+iframe 
+	width: 100%
+.select2-container--default .select2-selection--single
+.select2-container--default .select2-selection--multiple
+	border-radius 0 !important
+	height 36px !important
+	//min-height 36px !important
+.select2-container
+	width 100% !important
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice
+	margin-top 1px !important
+	background-color #BF1C2D !important
+	color white
+	
+.wpcf7-form-control-wrap.date.flatpickr-input.flatpickr-mobile
+.wpcf7-form-control-wrap.time.flatpickr-input.flatpickr-mobile
+	display none
+	
+.columns-2
+	display flex 
+	flex-wrap wrap
+	justify-content space-between
+
+	.column
+	.field
+		width 100%
+@media screen and (min-width:768px)
+	.columns-2
+		margin-bottom: 1.25rem;
+		>.field
+			width 45%
+		.column
+			width 45%
+.txt-center
+	text-align center
+.txt-white
+	color: #fff
+
+.txt-shadow
+	p
+		text-shadow: 1px 1px 2px rgba(0,0,0,.75)
+
+.search-submit
+.comment-form .submit
+.wpcf7-submit
+.btn
+	padding .8rem .5rem .8rem .5rem
+	display inline-block
+	color #000
+	transition all .5s ease
+	font-weight 400
+	margin-bottom 1.25rem
+	text-transform: uppercase
+	&.naranja
+		background-color naranja
+		border-color naranja
+		color #fff
+		&:hover
+			background-color #00642f
+			color white
+	&.danger
+		background-color rojo
+		border-color rojo
+		color #fff
+		&:hover
+			background-color #00642f
+			color white
+	&.success
+	&.verde
+		background-color #007d3b
+		border-color #00642f
+		color #fff
+		&:hover
+			background-color #00642f
+			color white
+	&.secondary
+		background-color #e7e7e7
+		border-color #b9b9b9
+		color #333
+		&:hover
+			background-color #b9b9b9
+			color white
+.search-submit
+.comment-form .submit
+.wpcf7-submit
+	background-color #007d3b
+	border-color #00642f
+	color #fff
+	border none
+	&:hover
+		background-color #00642f
+		color white	
+		
+.flex-container-sb
+	display flex
+	flex-wrap wrap
+	justify-content space-between
+	
+.flex-container-sa
+	display flex
+	flex-wrap wrap
+	justify-content space-around
+
+.inner2
+	max-width 960px
+	margin 0 auto
+	position relative
+	padding-left 2rem
+	padding-right 2rem	
+.inner
+	max-width 1400px
+	margin 0 auto
+	position relative
+	padding-left 2.5rem
+	padding-right 2.5rem
+		
+@media screen and (min-width: 1200px)
+	.inner
+		padding-left: 6.5rem;
+		padding-right: 6.5rem;
+
+#CDSWIDSSP
+	width 100% !important
+
+.pagination
+	padding .5rem 0
+	.screen-reader-text
+		display none
+	.nav-links
+		text-align center
+		span
+		a 
+			display inline-block
+			padding .5rem 1rem
+			background-color $naranja
+			color white
+			&:hover 
+				background-color #000
+			&.current
+				background-color $verde
