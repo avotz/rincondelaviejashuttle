@@ -95,7 +95,8 @@ body
 			font-weight 700
 			font-size 1.6rem
 			&:hover
-				color verde
+				//color #00642f
+				text-decoration: underline
 				margin-left 1rem
 			
 	&-btn-menu
@@ -254,20 +255,27 @@ body
 	h1 
 		margin-bottom 2rem
 		color white
-		font-size 3rem
+		font-size 2rem
 	p 
 		font-size 1.5rem
 
 .menu-left
 	position fixed
 	left 0
-	top 12%
+	right 0
+	bottom 0
+	top auto
 	box-shadow 1px 1px 5px rgba(0,0,0,.15)
-	border-radius 0 5px 5px 0
+	border-radius 0 0 0 0
 	background-color white
 	z-index: 2
+	ul
+		display: flex
+		flex-wrap: wrap
+		justify-content: space-around
 	li 
 		border-bottom 1px solid #e3e3e3
+		display inline-block
 		&:last-child
 			border none
 	a 
@@ -287,14 +295,28 @@ body
 			display inline-block
 			color #3a2b14
 
+@media screen and (min-width: 960px)
+	.banner 
+		h1
+			font-size: 3rem
+	.menu-left
+		right auto
+		bottom: auto
+		top 12%
+		border-radius 0 5px 5px 0
+		ul
+			display: block
+		li
+			display block
 .main
 	height 100vh
 	padding-top: 5rem;
 
 article.page
-	margin-left: 8.5rem
-	padding: .5rem
+	margin-left: 0
+	padding: .5rem .5rem 6rem .5rem
 	max-width 700px
+	width: 100%
 	.entry-header
 		//margin-bottom: 1rem
 		background: verde
@@ -309,8 +331,16 @@ article.page
 .woocommerce-page
 	article.page
 		max-width 100%
+
+@media screen and (min-width: 960px)
+	article.page
+		width auto
+		padding: .5rem
+		margin-left: 8.5rem
+
 body.page
 body.single
+body.archive
 	.banner
 		z-index -1 
 

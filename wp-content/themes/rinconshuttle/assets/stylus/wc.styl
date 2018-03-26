@@ -6,6 +6,7 @@
     float: none;
     width: 100%;
     background-color: rgba(255,255,255,.8)
+    padding: .5rem
     // .wc-bookings-booking-form
     //     background-color: rgba(255,255,255,.8)
 
@@ -39,8 +40,13 @@
 .woocommerce div.product div.summary
     clear: both;
     float:none;
-    padding-top: 4rem;
-    padding-left: 8.5rem;
+    padding-top: 0//4rem;
+    padding-left: 1rem;
+
+@media screen and (min-width:768px)
+    .woocommerce div.product div.summary
+        padding-top: 2rem;
+        padding-left: 8.5rem;
 
 .woocommerce div.product p.price, .woocommerce div.product span.price
     font-size: 2rem

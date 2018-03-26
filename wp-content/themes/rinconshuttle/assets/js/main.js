@@ -65,7 +65,7 @@ function resize () {
 
 function responsive() {
            
-                var isResponsive = $('.main').hasClass('fp-responsive');
+               /* var isResponsive = $('.main').hasClass('fp-responsive');
                 if (getWindowWidth() < 1000) {
                     if (!isResponsive) {
                         $.fn.fullpage.setAutoScrolling(false, 'internal');
@@ -77,7 +77,7 @@ function responsive() {
                      $.fn.fullpage.setFitToSection(true, 'internal');
                      $('.main').removeClass('fp-responsive');
                 }
-
+*/
                
             
         }

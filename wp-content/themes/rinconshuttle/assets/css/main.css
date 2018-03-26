@@ -1139,6 +1139,7 @@ iframe {
   float: none;
   width: 100%;
   background-color: rgba(255,255,255,0.8);
+  padding: 0.5rem;
 }
 @media screen and (min-width: 768px) {
   .woocommerce #content div.product .woocommerce-tabs,
@@ -1177,8 +1178,14 @@ iframe {
 .woocommerce div.product div.summary {
   clear: both;
   float: none;
-  padding-top: 4rem;
-  padding-left: 8.5rem;
+  padding-top: 0;
+  padding-left: 1rem;
+}
+@media screen and (min-width: 768px) {
+  .woocommerce div.product div.summary {
+    padding-top: 2rem;
+    padding-left: 8.5rem;
+  }
 }
 .woocommerce div.product p.price,
 .woocommerce div.product span.price {
@@ -1478,7 +1485,7 @@ body.home .header-logo {
 }
 .nav-menu a:hover,
 .nav-menu-link:hover {
-  color: #959c1e;
+  text-decoration: underline;
   margin-left: 1rem;
 }
 .nav-btn-menu {
@@ -1681,7 +1688,7 @@ body.home .header-logo {
 .banner h1 {
   margin-bottom: 2rem;
   color: #fff;
-  font-size: 3rem;
+  font-size: 2rem;
 }
 .banner p {
   font-size: 1.5rem;
@@ -1689,15 +1696,38 @@ body.home .header-logo {
 .menu-left {
   position: fixed;
   left: 0;
-  top: 12%;
+  right: 0;
+  bottom: 0;
+  top: auto;
   -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.15);
   box-shadow: 1px 1px 5px rgba(0,0,0,0.15);
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 0 0 0;
   background-color: #fff;
   z-index: 2;
 }
+.menu-left ul {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  -o-box-lines: multiple;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: distribute;
+  -moz-box-pack: distribute;
+  -o-box-pack: distribute;
+  -ms-flex-pack: distribute;
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+}
 .menu-left li {
   border-bottom: 1px solid #e3e3e3;
+  display: inline-block;
 }
 .menu-left li:last-child {
   border: none;
@@ -1721,14 +1751,32 @@ body.home .header-logo {
   display: inline-block;
   color: #3a2b14;
 }
+@media screen and (min-width: 960px) {
+  .banner h1 {
+    font-size: 3rem;
+  }
+  .menu-left {
+    right: auto;
+    bottom: auto;
+    top: 12%;
+    border-radius: 0 5px 5px 0;
+  }
+  .menu-left ul {
+    display: block;
+  }
+  .menu-left li {
+    display: block;
+  }
+}
 .main {
   height: 100vh;
   padding-top: 5rem;
 }
 article.page {
-  margin-left: 8.5rem;
-  padding: 0.5rem;
+  margin-left: 0;
+  padding: 0.5rem 0.5rem 6rem 0.5rem;
   max-width: 700px;
+  width: 100%;
 }
 article.page .entry-header {
   background: #959c1e;
@@ -1744,8 +1792,16 @@ article.page .entry-content {
 .woocommerce-page article.page {
   max-width: 100%;
 }
+@media screen and (min-width: 960px) {
+  article.page {
+    width: auto;
+    padding: 0.5rem;
+    margin-left: 8.5rem;
+  }
+}
 body.page .banner,
-body.single .banner {
+body.single .banner,
+body.archive .banner {
   z-index: -1;
 }
 body.home .banner {
