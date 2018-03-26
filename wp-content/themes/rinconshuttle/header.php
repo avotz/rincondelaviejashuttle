@@ -67,7 +67,7 @@
       <ul class="menu-left-ul">
           <li><a href="<?php echo esc_url(home_url('/attractions')); ?>"><i class="fa fa-binoculars"></i> <span>Attractions</span> </a></li>
           <li><a href="<?php echo esc_url(home_url('/maps')); ?>"><i class="fa fa-map"></i> <span>Maps</span> </a></li>
-          <li><a href="<?php echo esc_url(home_url('/national-park')); ?>"><i class="fa fa-edit"></i> <span>National Parks</span> </a></li>
+          <li><a href="<?php echo esc_url(home_url('/national-park-facts')); ?>"><i class="fa fa-edit"></i> <span>National Parks</span> </a></li>
           <li><a href="<?php echo esc_url(home_url('/product/shuttle')); ?>"><i class="fa fa-car"></i> <span>Shuttle</span> </a></li>
           
       </ul>

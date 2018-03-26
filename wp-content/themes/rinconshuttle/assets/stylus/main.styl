@@ -313,27 +313,36 @@ body
 	padding-top: 5rem;
 
 article.page
+section.error-404
+
 	margin-left: 0
 	padding: .5rem .5rem 6rem .5rem
 	max-width 700px
 	width: 100%
+	.page-header
 	.entry-header
 		//margin-bottom: 1rem
 		background: verde
 		padding: 1rem .5rem
 		h1
 			color: white
-			
+	.page-content
 	.entry-content
 		background-color: rgba(255,255,255,.8)
 		padding: .5rem
-
+div.product
+	.entry-header
+		background: verde
+		padding: 1rem .5rem
+		h1
+			color: white
 .woocommerce-page
 	article.page
 		max-width 100%
 
 @media screen and (min-width: 960px)
 	article.page
+	section.error-404
 		width auto
 		padding: .5rem
 		margin-left: 8.5rem
@@ -341,6 +350,7 @@ article.page
 body.page
 body.single
 body.archive
+body.error404
 	.banner
 		z-index -1 
 

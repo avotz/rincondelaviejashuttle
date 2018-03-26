@@ -763,18 +763,17 @@ h5 {
   margin-top: 0;
   font-weight: 400;
 }
-h1,
-h2 {
+h1 {
   font-weight: 900;
   font-size: 32px;
   color: #261e1e;
   text-transform: uppercase;
   margin: 0;
   padding: 0;
+  line-height: 38px;
 }
 @media screen and (min-width: 900px) {
-  h1,
-  h2 {
+  h1 {
     font-size: 42px;
   }
 }
@@ -1179,12 +1178,19 @@ iframe {
   clear: both;
   float: none;
   padding-top: 0;
-  padding-left: 1rem;
+  margin-left: 0;
+  margin-bottom: 0;
 }
 @media screen and (min-width: 768px) {
   .woocommerce div.product div.summary {
     padding-top: 2rem;
-    padding-left: 8.5rem;
+    margin-left: 8rem;
+  }
+  .woocommerce #content div.product div.summary,
+  .woocommerce div.product div.summary,
+  .woocommerce-page #content div.product div.summary,
+  .woocommerce-page div.product div.summary {
+    width: 45%;
   }
 }
 .woocommerce div.product p.price,
@@ -1772,28 +1778,46 @@ body.home .header-logo {
   height: 100vh;
   padding-top: 5rem;
 }
-article.page {
+article.page,
+section.error-404 {
   margin-left: 0;
   padding: 0.5rem 0.5rem 6rem 0.5rem;
   max-width: 700px;
   width: 100%;
 }
-article.page .entry-header {
+article.page .page-header,
+section.error-404 .page-header,
+article.page .entry-header,
+section.error-404 .entry-header {
   background: #959c1e;
   padding: 1rem 0.5rem;
 }
-article.page .entry-header h1 {
+article.page .page-header h1,
+section.error-404 .page-header h1,
+article.page .entry-header h1,
+section.error-404 .entry-header h1 {
   color: #fff;
 }
-article.page .entry-content {
+article.page .page-content,
+section.error-404 .page-content,
+article.page .entry-content,
+section.error-404 .entry-content {
   background-color: rgba(255,255,255,0.8);
   padding: 0.5rem;
+}
+div.product .entry-header {
+  background: #959c1e;
+  padding: 1rem 0.5rem;
+}
+div.product .entry-header h1 {
+  color: #fff;
 }
 .woocommerce-page article.page {
   max-width: 100%;
 }
 @media screen and (min-width: 960px) {
-  article.page {
+  article.page,
+  section.error-404 {
     width: auto;
     padding: 0.5rem;
     margin-left: 8.5rem;
@@ -1801,7 +1825,8 @@ article.page .entry-content {
 }
 body.page .banner,
 body.single .banner,
-body.archive .banner {
+body.archive .banner,
+body.error404 .banner {
   z-index: -1;
 }
 body.home .banner {

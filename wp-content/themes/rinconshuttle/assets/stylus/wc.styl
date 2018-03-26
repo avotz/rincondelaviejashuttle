@@ -41,12 +41,17 @@
     clear: both;
     float:none;
     padding-top: 0//4rem;
-    padding-left: 1rem;
+    margin-left: 0//1rem;
+    margin-bottom: 0
+
 
 @media screen and (min-width:768px)
     .woocommerce div.product div.summary
         padding-top: 2rem;
-        padding-left: 8.5rem;
+        margin-left: 8rem;
+    .woocommerce #content div.product div.summary, .woocommerce div.product div.summary, .woocommerce-page #content div.product div.summary, .woocommerce-page div.product div.summary
+        width: 45%
+    
 
 .woocommerce div.product p.price, .woocommerce div.product span.price
     font-size: 2rem
