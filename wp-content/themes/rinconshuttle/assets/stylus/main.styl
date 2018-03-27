@@ -347,6 +347,22 @@ div.product
 		padding: .5rem
 		margin-left: 8.5rem
 
+.footer
+	position fixed
+	right 1rem
+	bottom 6rem
+	z-index 2
+	color white
+	p 
+		margin-bottom: 0
+	a 
+		color: white
+		&:hover
+			text-decoration: underline
+@media screen and (min-width: 960px)
+	.footer
+		bottom 1rem
+
 body.page
 body.single
 body.archive
@@ -357,6 +373,7 @@ body.error404
 body.home
 	.banner
 		z-index 1 
+
 
 
 

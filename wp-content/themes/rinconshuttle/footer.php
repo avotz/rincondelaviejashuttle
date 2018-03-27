@@ -11,7 +11,9 @@
 
 ?>
 
-	
+<div class="footer">
+    <p><a href="tel:(506) 2668-0074">(506) 2668-0074</a> / <a href="tel:(506) 2668-0076"> (506) 2668-0076 </a> - <a href="mailto:info@rincondelaviejashuttle.com">info@rincondelaviejashuttle.com</a></p>
+</div>
 
 <?php wp_footer(); ?>
 
