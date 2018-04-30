@@ -117,7 +117,7 @@ function custom_override_checkout_fields($fields)
     unset($fields['billing']['billing_state']);
     unset($fields['billing']['billing_company']);
 
-    $fields['order']['order_comments']['placeholder'] = 'e.g. child seats, Pick up';
+    $fields['order']['order_comments']['placeholder'] = 'e.g. child seats, Pick up locations outside Liberia City';
     $fields['order']['order_comments']['label'] = function_exists('pll__') ? pll__('Important Notes') : 'Important Notes';
 
     $fields['billing']['billing_first_name']['label'] = function_exists('pll__') ? pll__('First name') : 'First name';
@@ -182,5 +182,66 @@ function rincon_redirect_checkout_add_cart($url)
 }
 
 add_filter('woocommerce_add_to_cart_redirect', 'rincon_redirect_checkout_add_cart');
+
+/**
+ * Add the field to the checkout
+ */
+add_action( 'woocommerce_after_order_notes', 'my_custom_checkout_field' );
+
+function my_custom_checkout_field( $checkout ) {
+
+    echo '<div id="tour_pickup_location">';
+ 
+       
+  
+    woocommerce_form_field( 'pickup_location', array(
+        'type'          => 'text',
+        'class'         => array('my-field-class form-row-wide'),
+        'label'         => __('Pick up location. <br><small><b>Extra fee for pick up locations outside Liberia City</b></small>'),
+        'placeholder'   => __(''),
+        'required'  => true,
+        ), $checkout->get_value( 'pickup_location' ));
+    
+       
+   
+
+    echo '</div>';
+
+}
+/**
+ * Process the checkout
+ */
+add_action('woocommerce_checkout_process', 'my_custom_checkout_field_process');
+
+function my_custom_checkout_field_process() {
+    // Check if set, if its not set add an error.
+    if ( ! $_POST['pickup_location'] )
+        wc_add_notice( __( '<strong>Pick up location</strong> is a required field.' ), 'error' );
+
+}
+ 
+/**
+ * Update the order meta with field value
+ */
+add_action( 'woocommerce_checkout_update_order_meta', 'my_custom_checkout_field_update_order_meta' );
+
+function my_custom_checkout_field_update_order_meta( $order_id ) {
+    if ( ! empty( $_POST['pickup_location'] ) ) {
+        update_post_meta( $order_id, 'Pick up location', sanitize_text_field( $_POST['pickup_location'] ) );
+    }
+ 
+
+}
+
+/**
+ * Display field value on the order edit page
+ */
+add_action( 'woocommerce_admin_order_data_after_billing_address', 'my_custom_checkout_field_display_admin_order_meta', 10, 1 );
+
+function my_custom_checkout_field_display_admin_order_meta($order){
+    echo '<p><strong>'.__('Pick up location').':</strong> ' . get_post_meta( $order->id, 'Pick up location', true ) . '</p>';
+
+   
+}
 
 

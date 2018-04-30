@@ -1749,6 +1749,9 @@ body.home .header-logo {
   color: #64b4dc;
   background-color: #eee;
 }
+.menu-left a:hover span {
+  color: #000;
+}
 .menu-left a i {
   display: block;
   font-size: 1.2rem;
@@ -1756,6 +1759,13 @@ body.home .header-logo {
 .menu-left a span {
   display: inline-block;
   color: #3a2b14;
+}
+.menu-left .featured {
+  background-color: #f6902f;
+  color: #fff;
+}
+.menu-left .featured span {
+  color: #fff;
 }
 @media screen and (min-width: 960px) {
   .banner h1 {
