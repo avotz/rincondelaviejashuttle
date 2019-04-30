@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * WC_Bookings_Meta_Boxes.
@@ -19,10 +16,10 @@ class WC_Bookings_Meta_Boxes {
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->meta_boxes[] = include( 'class-wc-bookings-details-meta-box.php' );
-		$this->meta_boxes[] = include( 'class-wc-bookings-customer-meta-box.php' );
-		$this->meta_boxes[] = include( 'class-wc-bookings-save-meta-box.php' );
-		$this->meta_boxes[] = include( 'class-wc-bookable-resource-details-meta-box.php' );
+		$this->meta_boxes[] = new WC_Bookings_Details_Meta_Box();
+		$this->meta_boxes[] = new WC_Bookings_Customer_Meta_Box();
+		$this->meta_boxes[] = new WC_Bookings_Save_Meta_Box();
+		$this->meta_boxes[] = new WC_Bookable_Resource_Details_Meta_Box();
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 1 );
 		add_action( 'admin_menu', array( $this, 'remove_submitdiv' ) );
@@ -62,4 +59,3 @@ class WC_Bookings_Meta_Boxes {
 		remove_meta_box( 'submitdiv', 'wc_booking', 'side' );
 	}
 }
-return new WC_Bookings_Meta_Boxes();

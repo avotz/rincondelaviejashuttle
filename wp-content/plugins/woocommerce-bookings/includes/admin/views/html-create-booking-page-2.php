@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php $this->show_errors(); ?>
 
-	<form method="POST">
+	<form method="POST" data-nonce="<?php echo esc_attr( wp_create_nonce( 'find-booked-day-blocks' ) ); ?>" id="wc-bookings-booking-form">
 		<table class="form-table">
 			<tbody>
 				<tr>

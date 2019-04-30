@@ -44,9 +44,14 @@ if ( $booking->has_resources() && $resource ) {
 }
 
 /* translators: 1: booking start date */
-echo sprintf( __( 'Booking Start Date: %s', 'woocommerce-bookings' ), $booking->get_start_date() ) . "\n";
+echo sprintf( __( 'Booking Start Date: %s', 'woocommerce-bookings' ), $booking->get_start_date( null, null, wc_should_convert_timezone( $booking ) ) ) . "\n";
 /* translators: 1: booking end date */
-echo sprintf( __( 'Booking End Date: %s', 'woocommerce-bookings' ), $booking->get_end_date() ) . "\n";
+echo sprintf( __( 'Booking End Date: %s', 'woocommerce-bookings' ), $booking->get_end_date( null, null, wc_should_convert_timezone( $booking ) ) ) . "\n";
+
+if ( wc_should_convert_timezone( $booking ) ) {
+	/* translators: 1: time zone */
+	echo sprintf( __( 'Time Zone: %s', 'woocommerce-bookings' ), str_replace( '_', ' ', $booking->get_local_timezone() ) );
+}
 
 if ( $booking->has_persons() ) {
 	foreach ( $booking->get_persons() as $id => $qty ) {
@@ -69,7 +74,7 @@ if ( $order ) {
 		echo sprintf( __( 'To pay for this booking please use the following link: %s', 'woocommerce-bookings' ), $order->get_checkout_payment_url() ) . "\n\n";
 	}
 
-	do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plain_text );
+	do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plain_text, $email );
 
 	$pre_wc_30 = version_compare( WC_VERSION, '3.0', '<' );
 
@@ -84,7 +89,7 @@ if ( $order ) {
 	/* translators: 1: order date */
 	echo sprintf( __( 'Order date: %s', 'woocommerce-bookings' ), date_i18n( wc_date_format(), strtotime( $order_date ) ) ) . "\n";
 
-	do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text );
+	do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email );
 
 	echo "\n";
 
@@ -121,7 +126,7 @@ if ( $order ) {
 
 	echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
-	do_action( 'woocommerce_email_after_order_table', $order, $sent_to_admin, $plain_text );
+	do_action( 'woocommerce_email_after_order_table', $order, $sent_to_admin, $plain_text, $email );
 }
 
 echo apply_filters( 'woocommerce_email_footer_text', get_option( 'woocommerce_email_footer_text' ) );

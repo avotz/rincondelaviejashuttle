@@ -10,10 +10,6 @@
  * @since    3.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
  * WC_Data_Exception class.
  */

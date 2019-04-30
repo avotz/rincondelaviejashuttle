@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the WooCommerce - WooCommerce Bookings - Latest package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-10-12 10:46:15+0000\n"
+"PO-Revision-Date: 2018-08-31 10:12:11+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -91,7 +91,7 @@ msgstr "Bezahlt"
 #: includes/wc-bookings-functions.php:192
 #: includes/wc-bookings-functions.php:199
 msgid "Confirmed"
-msgstr ""
+msgstr "Bestätigt"
 
 #: includes/wc-bookings-functions.php:151
 #: includes/wc-bookings-functions.php:177
@@ -2271,7 +2271,7 @@ msgstr "Abreisedatum"
 #: includes/admin/class-wc-bookings-cpt.php:175
 #: templates/myaccount/bookings.php:39 templates/myaccount/my-bookings.php:31
 msgid "Start Date"
-msgstr "Anreisedatm"
+msgstr "Anreisedatum"
 
 #: includes/admin/class-wc-bookings-cpt.php:174
 #: templates/emails/customer-booking-confirmed.php:91

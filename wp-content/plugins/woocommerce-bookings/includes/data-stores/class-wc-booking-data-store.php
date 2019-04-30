@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * WC Booking Data Store: Stored in CPT.
@@ -27,6 +24,7 @@ class WC_Booking_Data_Store extends WC_Data_Store_WP {
 		'_booking_start'                  => 'start',
 		'_booking_end'                    => 'end',
 		'_wc_bookings_gcalendar_event_id' => 'google_calendar_event_id',
+		'_local_timezone'                 => 'local_timezone',
 	);
 
 	/*
@@ -67,6 +65,7 @@ class WC_Booking_Data_Store extends WC_Data_Store_WP {
 
 			do_action( 'woocommerce_new_booking', $booking->get_id() );
 		}
+		delete_booking_slots_transient( $booking->get_product_id() );
 	}
 
 	/**
@@ -131,6 +130,7 @@ class WC_Booking_Data_Store extends WC_Data_Store_WP {
 		$booking->save_meta_data();
 		$booking->apply_changes();
 		WC_Cache_Helper::get_transient_version( 'bookings', true );
+		delete_booking_slots_transient( $booking->get_product_id() );
 	}
 
 	/**
@@ -153,6 +153,7 @@ class WC_Booking_Data_Store extends WC_Data_Store_WP {
 			$booking->set_status( 'trash' );
 			do_action( 'woocommerce_trash_booking', $id );
 		}
+		delete_booking_slots_transient( $booking->get_product_id() );
 	}
 
 	/**
@@ -246,21 +247,25 @@ class WC_Booking_Data_Store extends WC_Data_Store_WP {
 	public static function get_booking_ids_by( $filters = array() ) {
 		global $wpdb;
 
-		$filters = wp_parse_args( $filters, array(
-			'object_id'    => 0,
-			'object_type'  => 'product',
-			'status'       => false,
-			'limit'        => -1,
-			'offset'       => 0,
-			'order_by'     => 'date_created',
-			'order'        => 'DESC',
-			'date_before'  => false,
-			'date_after'   => false,
-			'date_between' => array(
-				'start' => false,
-				'end'   => false,
-			),
-		) );
+		$filters = wp_parse_args(
+			$filters,
+			array(
+				'object_id'                => 0,
+				'object_type'              => 'product',
+				'status'                   => false,
+				'limit'                    => -1,
+				'offset'                   => 0,
+				'order_by'                 => 'date_created',
+				'order'                    => 'DESC',
+				'date_before'              => false,
+				'date_after'               => false,
+				'google_calendar_event_id' => false,
+				'date_between'             => array(
+					'start' => false,
+					'end'   => false,
+				),
+			)
+		);
 
 		$meta_keys            = array();
 		$query_where          = array( 'WHERE 1=1', "p.post_type = 'wc_booking'" );
@@ -283,6 +288,16 @@ class WC_Booking_Data_Store extends WC_Data_Store_WP {
 						_booking_product_id.meta_value IN ('" . implode( "','", array_map( 'esc_sql', $filters['object_id'] ) ) . "') OR _booking_resource_id.meta_value IN ('" . implode( "','", array_map( 'esc_sql', $filters['object_id'] ) ) . "')
 					)";
 					break;
+				case 'product_and_resource':
+					$meta_keys[]   = '_booking_product_id';
+					$meta_keys[]   = '_booking_resource_id';
+					if ( $filters['product_id'] ) {
+						$query_where[] = "_booking_product_id.meta_value IN ('" . implode( "','", array_map( 'esc_sql', $filters['product_id'] ) ) . "')";
+					}
+					if ( $filters['resource_id'] ) {
+						$query_where[] = "_booking_resource_id.meta_value IN ('" . implode( "','", array_map( 'esc_sql', $filters['resource_id'] ) ) . "')";
+					}
+					break;
 				case 'customer':
 					$meta_keys[]   = '_booking_customer_id';
 					$query_where[] = "_booking_customer_id.meta_value IN ('" . implode( "','", array_map( 'esc_sql', $filters['object_id'] ) ) . "')";
@@ -292,6 +307,19 @@ class WC_Booking_Data_Store extends WC_Data_Store_WP {
 
 		if ( ! empty( $filters['status'] ) ) {
 			$query_where[] = "p.post_status IN ('" . implode( "','", $filters['status'] ) . "')";
+		}
+
+		if ( ! empty( $filters['google_calendar_event_id'] ) ) {
+			$meta_keys[]   = '_wc_bookings_gcalendar_event_id';
+			$query_where[] = "_wc_bookings_gcalendar_event_id.meta_value IN ('" .
+				implode(
+					"','",
+					array_map(
+						'esc_sql',
+						(array) $filters['google_calendar_event_id']
+					)
+				)
+				. "')";
 		}
 
 		if ( ! empty( $filters['date_between']['start'] ) && ! empty( $filters['date_between']['end'] ) ) {
@@ -325,7 +353,7 @@ class WC_Booking_Data_Store extends WC_Data_Store_WP {
 					$filters['order_by'] = 'p.post_date';
 					break;
 				case 'start_date':
-					$meta_keys[]   = '_booking_start';
+					$meta_keys[]         = '_booking_start';
 					$filters['order_by'] = '_booking_start.meta_value';
 					break;
 			}

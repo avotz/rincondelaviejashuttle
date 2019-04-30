@@ -1,9 +1,5 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
  * Booking is confirmed
  *
@@ -86,8 +82,10 @@ class WC_Email_Booking_Confirmed extends WC_Email {
 				}
 			}
 
-			$this->find[]    = '{product_title}';
-			$this->replace[] = $this->object->get_product()->get_title();
+			if ( $this->object->get_product() ) {
+				$this->find[]    = '{product_title}';
+				$this->replace[] = $this->object->get_product()->get_title();
+			}
 
 			if ( $this->object->get_order() ) {
 				if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
@@ -141,6 +139,7 @@ class WC_Email_Booking_Confirmed extends WC_Email {
 			'email_heading' => $this->get_heading(),
 			'sent_to_admin' => false,
 			'plain_text'    => false,
+			'email'         => $this,
 		), 'woocommerce-bookings/', $this->template_base );
 		return ob_get_clean();
 	}
@@ -158,6 +157,7 @@ class WC_Email_Booking_Confirmed extends WC_Email {
 			'email_heading' => $this->get_heading(),
 			'sent_to_admin' => false,
 			'plain_text'    => true,
+			'email'         => $this,
 		), 'woocommerce-bookings/', $this->template_base );
 		return ob_get_clean();
 	}
@@ -207,5 +207,3 @@ class WC_Email_Booking_Confirmed extends WC_Email {
 		);
 	}
 }
-
-return new WC_Email_Booking_Confirmed();

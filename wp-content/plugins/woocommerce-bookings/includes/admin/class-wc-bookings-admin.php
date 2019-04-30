@@ -1,9 +1,5 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
  * Booking admin
  */
@@ -11,7 +7,9 @@ class WC_Bookings_Admin {
 	private static $_this;
 
 	/**
-	 * Constructor
+	 * Constructor.
+	 *
+	 * @since 1.13.0
 	 */
 	public function __construct() {
 		self::$_this = $this;
@@ -36,7 +34,9 @@ class WC_Bookings_Admin {
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_data' ), 20 );
 		add_action( 'woocommerce_admin_process_product_object', array( $this, 'set_props' ), 20 );
 
-		include( 'class-wc-bookings-menus.php' );
+		add_filter( 'woocommerce_product_type_query', array( $this, 'maybe_override_product_type' ), 10, 2 );
+
+		add_action( 'before_delete_post', array( $this, 'handle_deleted_bookable_product' ) );
 	}
 
 	public function init() {
@@ -59,6 +59,12 @@ class WC_Bookings_Admin {
 				'button'   => __( 'Clean Person Types', 'woocommerce-bookings' ),
 				'desc'     => __( 'This tool will clean the person types that are not used by any booking or a product.', 'woocommerce-bookings' ),
 				'callback' => array( 'WC_Bookings_Tools', 'clean_person_types' ),
+			),
+			'clear_expired_in_cart_bookings' => array(
+				'name'     => __( 'Clear expired In Cart bookings', 'woocommerce-bookings' ),
+				'button'   => __( 'Clear', 'woocommerce-bookings' ),
+				'desc'     => __( 'This tool will clear all expired In Cart bookings.', 'woocommerce-bookings' ),
+				'callback' => array( 'WC_Bookings_Tools', 'remove_in_cart_bookings' ),
 			),
 		);
 
@@ -121,9 +127,9 @@ class WC_Bookings_Admin {
 					$availability[ $i ]['to']   = wc_booking_sanitize_time( $_POST['wc_booking_availability_to_time'][ $i ] );
 					break;
 				case 'time:range':
-					$availability[ $i ]['from'] = wc_booking_sanitize_time( $_POST['wc_booking_availability_from_time'][ $i ] );
-					$availability[ $i ]['to']   = wc_booking_sanitize_time( $_POST['wc_booking_availability_to_time'][ $i ] );
-
+				case 'custom:daterange':
+					$availability[ $i ]['from']      = wc_booking_sanitize_time( $_POST['wc_booking_availability_from_time'][ $i ] );
+					$availability[ $i ]['to']        = wc_booking_sanitize_time( $_POST['wc_booking_availability_to_time'][ $i ] );
 					$availability[ $i ]['from_date'] = wc_clean( $_POST['wc_booking_availability_from_date'][ $i ] );
 					$availability[ $i ]['to_date']   = wc_clean( $_POST['wc_booking_availability_to_date'][ $i ] );
 					break;
@@ -461,15 +467,15 @@ class WC_Bookings_Admin {
 	 * Include CPT handlers
 	 */
 	public function include_post_type_handlers() {
-		include( 'class-wc-bookings-cpt.php' );
-		include( 'class-wc-bookable-resource-cpt.php' );
+		new WC_Bookings_CPT();
+		new WC_Bookable_Resource_CPT();
 	}
 
 	/**
 	 * Include meta box handlers
 	 */
 	public function include_meta_box_handlers() {
-		include( 'class-wc-bookings-meta-boxes.php' );
+		new WC_Bookings_Meta_Boxes();
 	}
 
 	/**
@@ -535,7 +541,7 @@ class WC_Bookings_Admin {
 	 * Show the booking tab
 	 */
 	public function add_tab() {
-		include( 'views/html-booking-tab.php' );
+		include 'views/html-booking-tab.php';
 	}
 
 	/**
@@ -548,7 +554,7 @@ class WC_Bookings_Admin {
 			$bookable_product = new WC_Product_Booking( $post->ID );
 		}
 
-		include( 'views/html-booking-data.php' );
+		include 'views/html-booking-data.php';
 	}
 
 	/**
@@ -572,12 +578,12 @@ class WC_Bookings_Admin {
 			}
 		}
 
-		wp_enqueue_script( 'wc_bookings_writepanel_js' );
+		wp_enqueue_script( 'wc_bookings_admin_js' );
 
-		include( 'views/html-booking-resources.php' );
-		include( 'views/html-booking-availability.php' );
-		include( 'views/html-booking-pricing.php' );
-		include( 'views/html-booking-persons.php' );
+		include 'views/html-booking-resources.php';
+		include 'views/html-booking-availability.php';
+		include 'views/html-booking-pricing.php';
+		include 'views/html-booking-persons.php';
 	}
 
 	/**
@@ -586,11 +592,27 @@ class WC_Bookings_Admin {
 	public function styles_and_scripts() {
 		global $post, $wp_scripts;
 
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$screen = get_current_screen();
 
-		wp_enqueue_style( 'wc_bookings_admin_styles', WC_BOOKINGS_PLUGIN_URL . '/assets/css/admin.css', null, WC_BOOKINGS_VERSION );
-		wp_register_script( 'wc_bookings_writepanel_js', WC_BOOKINGS_PLUGIN_URL . '/assets/js/writepanel' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker' ), WC_BOOKINGS_VERSION, true );
-		wp_register_script( 'wc_bookings_settings_js', WC_BOOKINGS_PLUGIN_URL . '/assets/js/settings' . $suffix . '.js', array( 'jquery' ), WC_BOOKINGS_VERSION, true );
+		$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.11.4';
+
+		wp_enqueue_style( 'jquery-ui-style', '//ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_version . '/themes/smoothness/jquery-ui.min.css' );
+		wp_enqueue_style( 'wc_bookings_admin_styles', WC_BOOKINGS_PLUGIN_URL . '/dist/css/admin.css', null, WC_BOOKINGS_VERSION );
+		wp_register_script( 'wc_bookings_admin_js', WC_BOOKINGS_PLUGIN_URL . '/dist/admin.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-sortable' ), WC_BOOKINGS_VERSION, true );
+
+		if ( 'wc_booking_page_create_booking' === $screen->id ) {
+			wp_enqueue_script( 'wc-bookings-moment', WC_BOOKINGS_PLUGIN_URL . '/dist/js/lib/moment-with-locales.js', array(), WC_BOOKINGS_VERSION, true );
+			wp_enqueue_script( 'wc-bookings-moment-timezone', WC_BOOKINGS_PLUGIN_URL . '/dist/js/lib/moment-timezone-with-data.js', array(), WC_BOOKINGS_VERSION, true );
+			wp_register_script( 'wc_bookings_admin_time_picker_js', WC_BOOKINGS_PLUGIN_URL . '/dist/admin-time-picker.js', null, WC_BOOKINGS_VERSION, true );
+		}
+
+		if ( 'wc_booking_page_booking_calendar' === $screen->id ) {
+			if ( WC_BOOKINGS_GUTENBERG_EXISTS ) {
+				wp_register_script( 'wc_bookings_admin_calendar_gutenberg_js', WC_BOOKINGS_PLUGIN_URL . '/dist/admin-calendar-gutenberg.js', array( 'wp-components', 'wp-element' ), WC_BOOKINGS_VERSION, true );
+				wp_enqueue_style( 'wc_bookings_admin_calendar_css', WC_BOOKINGS_PLUGIN_URL . '/dist/css/admin-calendar-gutenberg.css', null, WC_BOOKINGS_VERSION );
+			}
+			wp_register_script( 'wc_bookings_admin_calendar_js', WC_BOOKINGS_PLUGIN_URL . '/dist/admin-calendar.js', array(), WC_BOOKINGS_VERSION, true );
+		}
 
 		$params = array(
 			'i18n_remove_person'     => esc_js( __( 'Are you sure you want to remove this person type?', 'woocommerce-bookings' ) ),
@@ -606,10 +628,14 @@ class WC_Bookings_Admin {
 			'post'                   => isset( $post->ID ) ? $post->ID : '',
 			'plugin_url'             => WC()->plugin_url(),
 			'ajax_url'               => admin_url( 'admin-ajax.php' ),
-			'calendar_image'         => WC()->plugin_url() . '/assets/images/calendar.png',
+			'calendar_image'         => WC_BOOKINGS_PLUGIN_URL . '/dist/images/calendar.png',
+			'i18n_view_details'      => esc_js( __( 'View details', 'woocommerce-bookings' ) ),
+			'i18n_customer'          => esc_js( __( 'Customer', 'woocommerce-bookings' ) ),
+			'i18n_resource'          => esc_js( __( 'Resource', 'woocommerce-bookings' ) ),
+			'i18n_persons'           => esc_js( __( 'Persons', 'woocommerce-bookings' ) ),
 		);
 
-		wp_localize_script( 'wc_bookings_writepanel_js', 'wc_bookings_writepanel_js_params', $params );
+		wp_localize_script( 'wc_bookings_admin_js', 'wc_bookings_admin_js_params', $params );
 	}
 
 	/**
@@ -646,6 +672,36 @@ class WC_Bookings_Admin {
 			wp_cache_delete( 'wc_bookings_timezone_string' );
 		}
 	}
-}
 
-new WC_Bookings_Admin();
+	/**
+	 * Override product type for New Product screen, if a request parameter is set.
+	 *
+	 * @param string $override Product Type
+	 * @param int    $product_id
+	 *
+	 * @return string
+	 */
+	public function maybe_override_product_type( $override, $product_id ) {
+		if ( ! empty( $_REQUEST['bookable_product'] ) ) {
+			return 'booking';
+		}
+
+		return $override;
+	}
+
+	/**
+	 * Perform clean up when a bookable product is deleted.
+	 *
+	 * @since 1.14.0
+	 * @param int $post_id The post ID.
+	 */
+	public function handle_deleted_bookable_product( $post_id ) {
+		$product = wc_get_product( absint( $post_id ) );
+
+		if ( ! is_a( $product, 'WC_Product' ) || 'booking' !== $product->get_type() ) {
+			return;
+		}
+
+		WC_Bookings_Tools::unlink_resource( $post_id );
+	}
+}

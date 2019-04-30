@@ -1,11 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-if ( class_exists( 'WC_Bookable_Resource_CPT' ) ) {
-	return;
-}
 
 /**
  * WC_Admin_CPT_Product Class.
@@ -89,6 +82,10 @@ class WC_Bookable_Resource_CPT {
 				$parents      = $wpdb->get_col( $wpdb->prepare( "SELECT product_id FROM {$wpdb->prefix}wc_booking_relationships WHERE resource_id = %d ORDER BY sort_order;", $post->ID ) );
 				$parent_posts = array();
 				foreach ( $parents as $parent_id ) {
+					if ( empty( get_the_title( $parent_id ) ) ) {
+						continue;
+					}
+
 					$parent_posts[] = '<a href="' . admin_url( 'post.php?post=' . $parent_id . '&action=edit' ) . '">' . get_the_title( $parent_id ) . '</a>';
 				}
 				echo $parent_posts ? implode( ', ', $parent_posts ) : __( 'N/A', 'woocommerce-bookings' );
@@ -111,4 +108,3 @@ class WC_Bookable_Resource_CPT {
 		}
 	}
 }
-return new WC_Bookable_Resource_CPT();

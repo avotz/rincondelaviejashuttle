@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * Handles email sending
@@ -31,27 +28,27 @@ class WC_Booking_Email_Manager {
 	 */
 	public function init_emails( $emails ) {
 		if ( ! isset( $emails['WC_Email_New_Booking'] ) ) {
-			$emails['WC_Email_New_Booking'] = include( 'emails/class-wc-email-new-booking.php' );
+			$emails['WC_Email_New_Booking'] = new WC_Email_New_Booking();
 		}
 
 		if ( ! isset( $emails['WC_Email_Booking_Reminder'] ) ) {
-			$emails['WC_Email_Booking_Reminder'] = include( 'emails/class-wc-email-booking-reminder.php' );
+			$emails['WC_Email_Booking_Reminder'] = new WC_Email_Booking_Reminder();
 		}
 
 		if ( ! isset( $emails['WC_Email_Booking_Confirmed'] ) ) {
-			$emails['WC_Email_Booking_Confirmed'] = include( 'emails/class-wc-email-booking-confirmed.php' );
+			$emails['WC_Email_Booking_Confirmed'] = new WC_Email_Booking_Confirmed();
 		}
 
 		if ( ! isset( $emails['WC_Email_Booking_Notification'] ) ) {
-			$emails['WC_Email_Booking_Notification'] = include( 'emails/class-wc-email-booking-notification.php' );
+			$emails['WC_Email_Booking_Notification'] = new WC_Email_Booking_Notification();
 		}
 
 		if ( ! isset( $emails['WC_Email_Booking_Cancelled'] ) ) {
-			$emails['WC_Email_Booking_Cancelled'] = include( 'emails/class-wc-email-booking-cancelled.php' );
+			$emails['WC_Email_Booking_Cancelled'] = new WC_Email_Booking_Cancelled();
 		}
 
 		if ( ! isset( $emails['WC_Email_Admin_Booking_Cancelled'] ) ) {
-			$emails['WC_Email_Admin_Booking_Cancelled'] = include( 'emails/class-wc-email-admin-booking-cancelled.php' );
+			$emails['WC_Email_Admin_Booking_Cancelled'] = new WC_Email_Admin_Booking_Cancelled();
 		}
 
 		return $emails;
@@ -149,5 +146,3 @@ class WC_Booking_Email_Manager {
 		}
 	}
 }
-
-new WC_Booking_Email_Manager();

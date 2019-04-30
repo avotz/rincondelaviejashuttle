@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the WooCommerce - WooCommerce Bookings - Latest package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-10-11 08:25:12+0000\n"
+"PO-Revision-Date: 2019-04-06 13:08:10+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -42,7 +42,7 @@ msgstr[1] ""
 
 #: templates/order/booking-summary-list.php:59
 msgid "%d Persons"
-msgstr ""
+msgstr "%d personer"
 
 #: templates/order/booking-display.php:41
 msgid "View my bookings &rarr;"
@@ -75,7 +75,7 @@ msgstr ""
 #: includes/wc-bookings-functions.php:154
 #: includes/wc-bookings-functions.php:180
 msgid "Cancelled"
-msgstr ""
+msgstr "Avbruten"
 
 #: includes/wc-bookings-functions.php:153
 #: includes/wc-bookings-functions.php:179
@@ -91,7 +91,7 @@ msgstr "Betald"
 #: includes/wc-bookings-functions.php:192
 #: includes/wc-bookings-functions.php:199
 msgid "Confirmed"
-msgstr ""
+msgstr "Bekräftat"
 
 #: includes/wc-bookings-functions.php:151
 #: includes/wc-bookings-functions.php:177
@@ -131,7 +131,7 @@ msgstr ""
 
 #: includes/compatibility/class-wc-product-data-store-cpt.php:117
 msgid "Invalid product."
-msgstr ""
+msgstr "Ogiltig produkt."
 
 #: includes/compatibility/class-wc-data-store.php:75
 #: includes/compatibility/class-wc-data-store.php:80
@@ -352,8 +352,8 @@ msgstr[1] ""
 #: woocommerce-bookings.php:434
 msgid "Confirmed <span class=\"count\">(%s)</span>"
 msgid_plural "Confirmed <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bekräftad <span class=\"count\">(%s)</span>"
+msgstr[1] "Bekräftade <span class=\"count\">(%s)</span>"
 
 #: woocommerce-bookings.php:426
 msgid "Paid &amp; Confirmed <span class=\"count\">(%s)</span>"
@@ -426,7 +426,7 @@ msgstr ""
 
 #: woocommerce-bookings.php:344
 msgid "No Resource found"
-msgstr ""
+msgstr "Ingen resurs hittad"
 
 #: woocommerce-bookings.php:343
 msgid "Search Resource"
@@ -434,19 +434,19 @@ msgstr ""
 
 #: woocommerce-bookings.php:341 woocommerce-bookings.php:342
 msgid "View Resource"
-msgstr ""
+msgstr "Visa resurs"
 
 #: woocommerce-bookings.php:340
 msgid "New Resource"
-msgstr ""
+msgstr "Ny resurs"
 
 #: woocommerce-bookings.php:339
 msgid "Edit Resource"
-msgstr ""
+msgstr "Redigera resurs"
 
 #: woocommerce-bookings.php:337
 msgid "Add New Resource"
-msgstr ""
+msgstr "Lägg till ny resurs"
 
 #: woocommerce-bookings.php:336
 msgid "Add Resource"
@@ -454,11 +454,11 @@ msgstr "Lägg till resurs"
 
 #: woocommerce-bookings.php:335
 msgid "Bookable resource"
-msgstr ""
+msgstr "Bokningsbar resurs"
 
 #: woocommerce-bookings.php:334
 msgid "Bookable resources"
-msgstr ""
+msgstr "Bokningsbara resurser"
 
 #: woocommerce-bookings.php:321
 msgid "Person Type"
@@ -648,7 +648,7 @@ msgstr ""
 
 #: templates/booking-form/datetime-picker.php:63
 msgid "Choose a date above to see available times."
-msgstr ""
+msgstr "Välj ett datum ovan för att se tillgängliga tider."
 
 #: templates/booking-form/datetime-picker.php:61
 msgid "Time"
@@ -737,11 +737,11 @@ msgstr ""
 
 #: includes/integrations/class-wc-bookings-google-calendar-integration.php:417
 msgid "Account connected successfully!"
-msgstr ""
+msgstr "Konto anslutet utan problem!"
 
 #: includes/integrations/class-wc-bookings-google-calendar-integration.php:404
 msgid "Invalid request!"
-msgstr ""
+msgstr "Ogiltig förfrågan!"
 
 #: includes/integrations/class-wc-bookings-google-calendar-integration.php:366
 msgid "Permission denied!"
@@ -1215,38 +1215,38 @@ msgstr "Välj en resurstyp"
 #: includes/booking-form/class-wc-booking-form.php:446
 msgid "night"
 msgid_plural "nights"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "natt"
+msgstr[1] "nätter"
 
 #: includes/booking-form/class-wc-booking-form.php:443
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "minut"
+msgstr[1] "minuter"
 
 #: includes/booking-form/class-wc-booking-form.php:440
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "timme"
+msgstr[1] "timmar"
 
 #: includes/booking-form/class-wc-booking-form.php:436
 msgid "week"
 msgid_plural "weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vecka"
+msgstr[1] "veckor"
 
 #: includes/booking-form/class-wc-booking-form.php:433
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dag"
+msgstr[1] "dagar"
 
 #: includes/booking-form/class-wc-booking-form.php:429
 msgid "month"
 msgid_plural "months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "månad"
+msgstr[1] "månader"
 
 #: includes/booking-form/class-wc-booking-form.php:166
 msgid "&times; %s minutes"
@@ -1283,19 +1283,19 @@ msgstr ""
 
 #: includes/booking-form/class-wc-booking-form.php:83
 msgid "Dates"
-msgstr ""
+msgstr "Datum"
 
 #: includes/booking-form/class-wc-booking-form.php:82
 msgid "Choose an End Date"
-msgstr ""
+msgstr "Välj ett slutdatum"
 
 #: includes/booking-form/class-wc-booking-form.php:81
 msgid "Choose a Start Date"
-msgstr ""
+msgstr "Välj ett startdatum"
 
 #: includes/booking-form/class-wc-booking-form.php:80
 msgid "This date is available"
-msgstr ""
+msgstr "Detta datum är tillgängligt"
 
 #: includes/booking-form/class-wc-booking-form.php:79
 msgid "This date is partially booked - but bookings still remain"
@@ -1599,7 +1599,7 @@ msgstr "Lägg till persontyp"
 #: includes/admin/views/html-booking-persons.php:61
 #: includes/admin/views/html-booking-resources.php:33
 msgid "Expand all"
-msgstr "Öppna alla"
+msgstr "Expandera alla"
 
 #: includes/admin/views/html-booking-persons.php:61
 #: includes/admin/views/html-booking-resources.php:33
@@ -1680,11 +1680,11 @@ msgstr "Persontyp Namn"
 #: includes/admin/views/html-booking-person.php:9
 #: includes/admin/views/html-booking-resource.php:12
 msgid "Click to toggle"
-msgstr "Klicka för att öppna"
+msgstr "Klicka för att slå på/av"
 
 #: includes/admin/views/html-booking-resource.php:8
 msgid "Remove"
-msgstr "Radera"
+msgstr "Ta bort"
 
 #: includes/admin/views/html-booking-data.php:105
 msgid "before the start date."
@@ -2014,7 +2014,7 @@ msgstr "Mars"
 #: includes/admin/views/html-booking-availability-fields.php:6
 #: includes/admin/views/html-booking-pricing-fields.php:10
 msgid "February"
-msgstr ""
+msgstr "Februari"
 
 #: includes/admin/views/html-booking-availability-fields.php:5
 #: includes/admin/views/html-booking-pricing-fields.php:9
@@ -2111,7 +2111,7 @@ msgstr "Boknings ID"
 
 #: includes/admin/class-wc-bookings-details-meta-box.php:330
 msgid "Start time:"
-msgstr ""
+msgstr "Starttid:"
 
 #: includes/admin/class-wc-bookings-details-meta-box.php:324
 msgid "Check this box if the booking is for all day."
@@ -2203,7 +2203,7 @@ msgstr "Bokningsdetaljer"
 
 #: includes/admin/class-wc-bookings-customer-meta-box.php:98
 msgid "Phone:"
-msgstr ""
+msgstr "Telefon:"
 
 #: includes/admin/class-wc-bookings-customer-meta-box.php:76
 #: includes/admin/class-wc-bookings-customer-meta-box.php:94
@@ -2354,11 +2354,11 @@ msgstr "Bokad av"
 
 #: includes/admin/class-wc-bookings-ajax.php:264
 msgid "No blocks available."
-msgstr ""
+msgstr "Inga block tillgängliga."
 
 #: includes/admin/class-wc-bookings-ajax.php:227
 msgid "Please enter a valid date."
-msgstr ""
+msgstr "Ange ett giltigt datum."
 
 #: includes/admin/class-wc-bookings-ajax.php:196
 msgid "Booking cost"

@@ -1,10 +1,7 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
- * Cron job handler
+ * Cron job handler.
  */
 class WC_Booking_Cron_Manager {
 
@@ -61,5 +58,3 @@ class WC_Booking_Cron_Manager {
 		}
 	}
 }
-
-new WC_Booking_Cron_Manager();

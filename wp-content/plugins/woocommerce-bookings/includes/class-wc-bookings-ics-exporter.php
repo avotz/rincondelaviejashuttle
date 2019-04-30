@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * .ics Exporter
@@ -202,7 +199,7 @@ class WC_Bookings_ICS_Exporter {
 			$ics .= 'BEGIN:VEVENT' . $this->eol;
 			$ics .= 'DTEND' . $date_prefix . $this->format_date( $booking->get_end(), $booking ) . $this->eol;
 			$ics .= 'UID:' . $this->uid_prefix . $booking->get_id() . $this->eol;
-			$ics .= 'DTSTAMP:' . $this->format_date( time() ) . $this->eol;
+			$ics .= 'DTSTAMP:' . $this->format_date( current_time( 'timestamp' ) ) . $this->eol;
 			$ics .= 'LOCATION:' . $this->eol;
 			$ics .= 'DESCRIPTION:' . $this->sanitize_string( $description ) . $this->eol;
 			$ics .= 'URL;VALUE=URI:' . $this->sanitize_string( $url ) . $this->eol;

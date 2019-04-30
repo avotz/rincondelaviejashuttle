@@ -1,9 +1,5 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
  * Booking Notifications
  *
@@ -58,8 +54,10 @@ class WC_Email_Booking_Notification extends WC_Email {
 				}
 			}
 
-			$this->find[]    = '{product_title}';
-			$this->replace[] = $this->object->get_product()->get_title();
+			if ( $this->object->get_product() ) {
+				$this->find[]    = '{product_title}';
+				$this->replace[] = $this->object->get_product()->get_title();
+			}
 
 			if ( $this->object->get_order() ) {
 				if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
@@ -89,6 +87,9 @@ class WC_Email_Booking_Notification extends WC_Email {
 				$this->find[]    = '{customer_last_name}';
 				$this->replace[] = $billing_last_name;
 
+				$this->find[]    = '{booking_id}';
+				$this->replace[] = $booking_id;
+
 				$this->recipient = $billing_email;
 			} else {
 				$this->find[]    = '{order_date}';
@@ -105,6 +106,9 @@ class WC_Email_Booking_Notification extends WC_Email {
 
 				$this->find[]    = '{customer_last_name}';
 				$this->replace[] = __( 'N/A', 'woocommerce-bookings' );
+
+				$this->find[]    = '{booking_id}';
+				$this->replace[] = $booking_id;
 
 				$customer_id = $this->object->customer_id;
 				$customer    = $customer_id ? get_user_by( 'id', $customer_id ) : false;
@@ -163,6 +167,7 @@ class WC_Email_Booking_Notification extends WC_Email {
 			'booking'              => $this->object,
 			'email_heading'        => $this->get_heading(),
 			'notification_message' => $this->notification_message,
+			'email'                => $this,
 		), 'woocommerce-bookings/', $this->template_base );
 		return ob_get_clean();
 	}
@@ -179,6 +184,7 @@ class WC_Email_Booking_Notification extends WC_Email {
 			'booking'              => $this->object,
 			'email_heading'        => $this->get_heading(),
 			'notification_message' => $this->notification_message,
+			'email'                => $this,
 		), 'woocommerce-bookings/', $this->template_base );
 		return ob_get_clean();
 	}
@@ -212,5 +218,3 @@ class WC_Email_Booking_Notification extends WC_Email {
 		);
 	}
 }
-
-return new WC_Email_Booking_Notification();

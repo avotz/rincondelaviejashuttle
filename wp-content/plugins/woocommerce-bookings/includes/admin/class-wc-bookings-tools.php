@@ -1,9 +1,5 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
  * Booking tools
  */
@@ -55,5 +51,59 @@ class WC_Bookings_Tools {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Removes In Cart bookings
+	 *
+	 * @param  string  $remove  If set to 'all' it will remove all In Cart, otherwise, just expired ones. 
+	 *
+	 * @return string  Message being returned after the system tool is run.
+	 */
+	public static function remove_in_cart_bookings( $remove = 'expired' ) {
+		$minutes = apply_filters( 'woocommerce_bookings_remove_inactive_cart_time', 60 );
+		$minutes = empty( $minutes ) ? 60 : $minutes;
+
+		$args = array(
+			'post_type'   => 'wc_booking',
+			'post_status' => 'in-cart',
+			'date_query'  => array(
+				array(
+					'column' => 'post_date_gmt',
+					'before' => date( 'Y-m-d H:i:s', current_time( 'timestamp' ) - ( $minutes * 60 ) ),
+				),
+			),
+			'posts_per_page' => -1,
+		);
+
+		// We set this, then remove it if there's a match because we don't always want to remove all. 
+		if ( 'all' === $remove ) {
+			unset( $args['date_query'] );
+		}
+
+		$results = new WP_Query( $args );
+
+		foreach ( $results->posts as $post ) {
+			wp_delete_post( $post->ID );
+		}
+
+		return sprintf( __( 'Removed %s expired In Cart booking(s).', 'woocommerce-bookings' ) , $results->found_posts );
+	}
+
+	/**
+	 * Removes the relationship between the resource and bookable product.
+	 *
+	 * @since 1.14.0
+	 * @param int $product_id The product ID to unlink.
+	 * @return bool
+	 */
+	public static function unlink_resource( $product_id = null ) {
+		if ( is_null( $product_id ) ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		$wpdb->delete( $wpdb->prefix . 'wc_booking_relationships', array( 'product_id' => $product_id ), array( '%d' ) );
 	}
 }

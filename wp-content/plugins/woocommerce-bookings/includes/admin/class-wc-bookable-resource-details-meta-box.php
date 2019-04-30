@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * WC_Bookable_Resource_Details_Meta_Box.
@@ -67,7 +64,7 @@ class WC_Bookable_Resource_Details_Meta_Box {
 	public function meta_box_inner( $post ) {
 		$post_id  = $post->ID;
 		$resource = new WC_Product_Booking_Resource( $post_id );
-		wp_enqueue_script( 'wc_bookings_writepanel_js' );
+		wp_enqueue_script( 'wc_bookings_admin_js' );
 		wp_nonce_field( 'bookable_resource_details_meta_box', 'bookable_resource_details_meta_box_nonce' );
 		?>
 		<style type="text/css">
@@ -102,7 +99,7 @@ class WC_Bookable_Resource_Details_Meta_Box {
 									<th><?php esc_html_e( 'Range', 'woocommerce-bookings' ); ?></th>
 									<th></th>
 									<th></th>
-									<th><?php esc_html_e( 'Bookable', 'woocommerce-bookings' ); ?>&nbsp;<a class="tips" data-tip="<?php _e( 'If not bookable, users won\'t be able to choose this block for their booking.', 'woocommerce-bookings' ); ?>">[?]</a></th>
+									<th><?php esc_html_e( 'Bookable', 'woocommerce-bookings' ); ?>&nbsp;<a class="tips" data-tip="<?php esc_attr_e( 'If not bookable, users won\'t be able to choose this block for their booking.', 'woocommerce-bookings' ); ?>">[?]</a></th>
 									<th><?php esc_html_e( 'Priority', 'woocommerce-bookings' ); ?>&nbsp;<a class="tips" data-tip="<?php echo esc_attr( get_wc_booking_priority_explanation() ); ?>">[?]</a></th>
 									<th class="remove" width="1%">&nbsp;</th>
 								</tr>
@@ -181,6 +178,7 @@ class WC_Bookable_Resource_Details_Meta_Box {
 					$availability[ $i ]['to']   = wc_booking_sanitize_time( $_POST['wc_booking_availability_to_time'][ $i ] );
 					break;
 				case 'time:range':
+				case 'custom:daterange':
 					$availability[ $i ]['from'] = wc_booking_sanitize_time( $_POST['wc_booking_availability_from_time'][ $i ] );
 					$availability[ $i ]['to']   = wc_booking_sanitize_time( $_POST['wc_booking_availability_to_time'][ $i ] );
 
@@ -230,5 +228,3 @@ class WC_Bookable_Resource_Details_Meta_Box {
 		$resource->save();
 	}
 }
-
-return new WC_Bookable_Resource_Details_Meta_Box();

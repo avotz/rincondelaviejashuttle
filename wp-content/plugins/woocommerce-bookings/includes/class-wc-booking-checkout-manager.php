@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
 
 /**
  * WC_Booking_Checkout_Manager class.
@@ -77,4 +74,3 @@ class WC_Booking_Checkout_Manager {
 	}
 }
 
-new WC_Booking_Checkout_Manager();

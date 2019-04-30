@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * WC_Bookings_Details_Meta_Box.
@@ -196,7 +193,7 @@ class WC_Bookings_Details_Meta_Box {
 							$guest_placeholder = __( 'Guest', 'woocommerce-bookings' );
 							if ( 'Guest' === $name ) {
 								/* translators: 1: guest name */
-								$guest_placeholder = sprintf( _x( 'Guest (%s)', 'woocommerce-bookings', 'Admin booking guest placeholder' ), $name );
+								$guest_placeholder = sprintf( _x( 'Guest (%s)', 'Admin booking guest placeholder', 'woocommerce-bookings' ), $name );
 							}
 
 							if ( $booking->get_customer_id() ) {
@@ -204,7 +201,7 @@ class WC_Bookings_Details_Meta_Box {
 								$customer_string = sprintf(
 									/* translators: 1: full name 2: user id 3: email */
 									esc_html__( '%1$s (#%2$s &ndash; %3$s)', 'woocommerce-bookings' ),
-									trim( $user->first_name . ' ' . $user->last_name ),
+									$user ? trim( $user->first_name . ' ' . $user->last_name ) : $customer->name,
 									$customer->user_id,
 									$customer->email
 								);
@@ -355,6 +352,26 @@ class WC_Bookings_Details_Meta_Box {
 								'value'       => date( 'H:i', $booking->get_end( 'edit' ) ),
 								'type'        => 'time',
 							) );
+
+						if ( wc_should_convert_timezone( $booking ) ) {
+							woocommerce_wp_text_input( array(
+								'id'                => 'booking_start_time',
+								'label'             => __( 'Start time (local timezone):', 'woocommerce-bookings' ),
+								'placeholder'       => 'hh:mm',
+								'value'             => date( 'H:i', $booking->get_start( 'edit', true ) ),
+								'type'              => 'time',
+								'custom_attributes' => array( 'disabled' => 'disabled' ),
+							) );
+
+							woocommerce_wp_text_input( array(
+								'id'                => 'booking_end_time',
+								'label'             => __( 'End time (local timezone):', 'woocommerce-bookings' ),
+								'placeholder'       => 'hh:mm',
+								'value'             => date( 'H:i', $booking->get_end( 'edit', true ) ),
+								'type'              => 'time',
+								'custom_attributes' => array( 'disabled' => 'disabled' ),
+							) );
+						}
 						?>
 					</div>
 				</div>
@@ -374,6 +391,7 @@ class WC_Bookings_Details_Meta_Box {
 
 			$( '.date-picker-field' ).datepicker({
 				dateFormat: 'yy-mm-dd',
+				firstDay: ". get_option( 'start_of_week' ) .",
 				numberOfMonths: 1,
 				showButtonPanel: true,
 			});
@@ -544,7 +562,7 @@ class WC_Bookings_Details_Meta_Box {
 
 		$booking->set_props( array(
 			'all_day'       => isset( $_POST['_booking_all_day'] ),
-			'customer_id'   => absint( $_POST['_booking_customer_id'] ),
+			'customer_id'   => isset( $_POST['_booking_customer_id'] ) ? absint( $_POST['_booking_customer_id'] ) : '',
 			'date_created'  => empty( $_POST['booking_date'] ) ? current_time( 'timestamp' ) : strtotime( $_POST['booking_date'] . ' ' . (int) $_POST['booking_date_hour'] . ':' . (int) $_POST['booking_date_minute'] . ':00' ),
 			'end'           => $end,
 			'order_id'      => isset( $_POST['_booking_order_id'] ) ? absint( $_POST['_booking_order_id'] ) : '',
@@ -563,5 +581,3 @@ class WC_Bookings_Details_Meta_Box {
 		do_action( 'woocommerce_booking_process_meta', $post_id );
 	}
 }
-
-return new WC_Bookings_Details_Meta_Box();

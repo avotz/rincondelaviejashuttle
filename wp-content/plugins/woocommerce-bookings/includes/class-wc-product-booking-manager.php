@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * Handles product booking transitions
@@ -66,8 +63,8 @@ class WC_Product_Booking_Manager {
 			}
 		}
 
+		delete_booking_slots_transient( $post_id );
+
 		return;
 	}
 }
-
-new WC_Product_Booking_Manager();

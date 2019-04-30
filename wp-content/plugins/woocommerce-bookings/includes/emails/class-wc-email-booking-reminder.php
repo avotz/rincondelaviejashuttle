@@ -1,9 +1,5 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
  * Booking reminder
  *
@@ -57,8 +53,10 @@ class WC_Email_Booking_Reminder extends WC_Email {
 				}
 			}
 
-			$this->find[]    = '{product_title}';
-			$this->replace[] = $this->object->get_product()->get_title();
+			if ( $this->object->get_product() ) {
+				$this->find[]    = '{product_title}';
+				$this->replace[] = $this->object->get_product()->get_title();
+			}
 
 			if ( $this->object->get_order() ) {
 				if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
@@ -109,6 +107,7 @@ class WC_Email_Booking_Reminder extends WC_Email {
 		wc_get_template( $this->template_html, array(
 			'booking'       => $this->object,
 			'email_heading' => $this->get_heading(),
+			'email'         => $this,
 		), 'woocommerce-bookings/', $this->template_base );
 		return ob_get_clean();
 	}
@@ -124,6 +123,7 @@ class WC_Email_Booking_Reminder extends WC_Email {
 		wc_get_template( $this->template_plain, array(
 			'booking'       => $this->object,
 			'email_heading' => $this->get_heading(),
+			'email'         => $this,
 		), 'woocommerce-bookings/', $this->template_base );
 		return ob_get_clean();
 	}
@@ -173,5 +173,3 @@ class WC_Email_Booking_Reminder extends WC_Email {
 		);
 	}
 }
-
-return new WC_Email_Booking_Reminder();

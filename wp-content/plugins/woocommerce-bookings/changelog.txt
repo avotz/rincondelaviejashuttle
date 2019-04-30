@@ -1,5 +1,143 @@
 *** WooCommerce Bookings Changelog ***
 
+2019-04-10 - version 1.14.0
+* Add   - REST endpoint to get all bookable products.
+* Add   - REST endpoint to get all categories that have bookable products.
+* Add   - REST endpoint to get all resources.
+* Add   - REST endpoint to get booking slots (available and booked).
+* Add   - REST endpoint to get bookings (available and booked).
+* Fix   - Customer defined blocks with different duration will not work.
+* Fix   - Changing Resource resets person count to blank.
+* Fix   - Prevent duplicate order status update notice.
+* Fix   - Issue with Google Calendar Connection when tokens had expired.
+* Fix   - Fatal error when opening admin calendar when Google recurring event is added.
+* Fix   - IE11 support for calendar.
+* Fix   - Admin calendar events popup details position was misaligned.
+* Fix   - PHP warning when trying to display guest name in the bookings order details in certain situations.
+* Fix   - Unlink products with resources when they are deleted to prevent resource display issue.
+* Fix   - Add back filter `woocommerce_bookings_gcalendar_sync` to update google event during sync.
+* Tweak - Bookings by slot ajax query can be paginated.
+* Tweak - Update copy on duration validation message.
+* Tweak - Optimized data caching for performance.
+* Tweak - WC 3.6 compatibility.
+
+2019-03-08 - version 1.13.3
+* Fix   - Date Range with Time rules don't work if product has more than one resource.
+
+2019-02-14 - version 1.13.2
+* Fix   - Customer defined blocks with different duration will not work.
+
+2019-02-06 - version 1.13.1
+* Fix   - Customer defined blocks with resources will not work.
+* Fix   - Incorrect data deleted for privacy erase.
+* Fix   - Define class and constants before plugins_loaded.
+* Fix   - Booking days adds an extra day.
+
+2019-02-05 - version 1.13.0
+* Add   - Ajax endpoint to get all bookable products.
+* Add   - Ajax endpoint to get all categories that have bookable products.
+* Add   - Ajax endpoint to get all resources.
+* Add   - Ajax endpoint to get booking slots (available and booked).
+* Add   - Created Settings section and moved Global Avaialability, Timezone, and Google Calendar options into it.
+* Add   - Google 2-way sync integration.
+* Add   - Introduce Action Scheduler.
+* Add   - Move calendar integration to bookings settings tab.
+* Add   - Store admin calendar - added datepicker for easier navigation.
+* Add   - Store admin calendar - daily view - Display a detailed popover when clicking on an event.
+* Add   - Use webpack for build process.
+* Add   - User booking calendar - replace duration input field with start time and end time.
+* Add   - WC Admin inbox notification after Bookings extension activation.
+* Fix   - Bookings Addons not showing under WooCommerce > Extensions.
+* Fix   - Buffers not respecting single block when they are selected.
+* Fix   - Coupons give the wrong discount.
+* Fix   - Customer defined blocks plus buffers calculate incorrect blocks length.
+* Fix   - Customer defined blocks with buffers allow only first booking of the day to be selected.
+* Fix   - Day is still showing as fully booked when switching resource.
+* Fix   - HTML encoding issue in calendar connection tab.
+* Fix   - No saved message feedback when saving timezone options settings.
+* Fix   - Rate not applied for December Bookings 1+ years in the future.
+* Tweak - Custom table and CRUD implementation for global availability
+* Tweak - Rename Google Calendar Integration settings to Calendar Connect.
+* Tweak - Show global availability in admin calendar.
+* Tweak - Store admin calendar - daily view - UX improvements.
+* Tweak - Store admin calendar - daily view - scroll to first available time in daily view.
+* Tweak - Store admin calendar - monthly view - UX improvements.
+* Tweak - User booking calendar - Misc minor UX improvements.
+
+2018-11-12 - version 1.12.2
+* Tweak  - Add link to WordPress timezone settings.
+* Tweak  - Performance improvement for Bookable products that contain many bookable blocks.
+* Fix    - Datepicker in Edit Booking fixed to honor WordPress week start day.
+* Fix    - My Account page shows bookings in the site's time zone, instead of the local time zone.
+* Fix    - JS error in console when trying to save a product that's not a booking. Prevents saving.
+* Tweak  - Prevent loading of availability on initial page load.
+* Tweak  - PAO 3.0+ compatibilty.
+* Fix    - Break after first application of custom rule on a booking block.
+* Fix    - Rounding issue when manually creating a booking and generating an order.
+* Fix    - Day is still showing as fully booked when switching resource.
+
+2018-10-24 - version 1.12.1
+* Fix    - Fix DST browser compatibility.
+
+2018-10-16 - version 1.12.0
+* Add    - Timezone conversion option.
+* Add    - Button to clear expired In Cart bookings.
+* Fix    - Fix ampersands for Google calendar integration.
+* Fix    - Default to first available booking date snippet.
+* Update - Switch to sass for css preprocessor.
+* Update - PAO 3.0 compatibility.
+* Update - WC 3.5 compatibility.
+
+2018-08-14 - version 1.11.3
+* Fix    - Display issue on compatibility with Product Add-Ons on product page.
+* Fix    - Clarification for calendar days restriction.
+* Fix    - JavaScript error for DatePicker in International Browsers.
+* Fix    - Calendar (Day) View - datepicker doesn't respect WordPress localization.
+* New    - Add hook to allow bypassing block availability checker
+* Fix    - DatePicker not initially loading the correct month when not current month.
+* Fix    - End date doesn't respect the `woocommerce_bookings_mdy_format` filter.
+
+2018-05-23 - version 1.11.2
+* Update - Privacy policy notification.
+* Update - Export/erasure hooks added.
+* Update - WC 3.4 compatibility.
+
+2018-04-24 - version 1.11.1
+* Fix    - Booking Reminder Emails: Same-day Bookings Contain The Text 'tomorrow'.
+* Fix    - Calendar doesn't load the correct availability for different resources.
+* Fix    - Calendar not finishing loading in wp-admin screens
+* Fix    - JavaScript error for DatePicker in International Browsers.
+* Fix    - The ajax endpoint should not return unavailable days for products of hour/minute duration types.
+* Tweak  - Refactor `get_available_blocks` parameters.
+
+2018-04-11 - version 1.11.0
+* Add    - Bookings info in dashboard widget for new bookings (monthly) and bookings that require confirmation.
+* Add    - Calendar Lazy load functionality.
+* Fix    - Allow Person Types Max to be blank/null.
+* Fix    - Billing details overwritten when assigning new manual booking to existing order purchased by guest.
+* Fix    - Booking Person Discount coupon isn't computed in the Total.
+* Fix    - Buffer period not blocking slots as expected.
+* Fix    - Datepicker in admin calendar day view does not honor WordPress week start day.
+* Fix    - Days before existing marked unavailable incorrectly.
+* Fix    - Fix PHP notices by passing through the email parameter.
+* Fix    - Out of Stock setting prevents adding the product to the cart.
+* Fix    - Product price includes person cost with minimum set to 0.
+* Fix    - Resource costs show up incorrectly for week blocks.
+* Fix    - Validation messages not showing up with required addon fields and require confirmation.
+* Fix    - Visual compatibility with product addons.
+* Tweak  - Add filter to override how resource quantity takes precedence over product quantity.
+* Tweak  - Compatibility with WooCommerce PIP.
+* Tweak  - Could not add Booking ID to notification email, now you can.
+* Tweak  - Introduced filter `woocommerce_bookings_calculated_booking_cost_success_output` to modify cost output.
+* Tweak  - Show when month is fully booked.
+
+2018-01-31 - version 1.10.12
+* Fix    - Added fourth arg in Confirmation emails for actions.
+* New    - Bookings data included in WooCommerce core import and export functionality.
+* Add    - Added compatibility for Sequential Order Numbers Pro
+* Fix    - Slots available after max available time.
+* Fix    - Double check product exists before attempting to get_title().
+
 2017-12-14 - version 1.10.11
 * Fix    - Order metadata not being synced with Google Calendar sync.
 * Fix    - Deposit integration parent order not marked as completed when it contains a booking.

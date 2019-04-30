@@ -20,17 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-wp_enqueue_script( 'wc-bookings-month-picker' );
+wp_enqueue_script( 'wc-bookings-booking-form' );
 $blocks = $field['blocks'];
 $label  = $field['label'];
 $name   = $field['name'];
+$fully_booked_months = array_keys( $field['fully_booked_months'] );
 ?>
 <div class="form-field form-field-wide">
 	<label for="<?php echo $name; ?>"><?php echo $label; ?>:</label>
 	<ul class="block-picker">
 		<?php
 		foreach ( $blocks as $block ) {
-			echo '<li data-block="' . esc_attr( date( 'Ym', $block ) ) . '"><a href="#" data-value="' . date( 'Y-m', $block ) . '">' . date_i18n( 'M y', $block ) . '</a></li>';
+			$fully_booked_class = in_array( date( 'Y-n', $block ), $fully_booked_months ) ? 'fully_booked' : '';
+			echo '<li class="' . $fully_booked_class . '" data-block="' . esc_attr( date( 'Ym', $block ) ) . '"><a href="#" data-value="' . date( 'Y-m', $block ) . '">' . date_i18n( 'M y', $block ) . '</a></li>';
 		}
 		?>
 	</ul>

@@ -20,22 +20,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-wp_enqueue_script( 'wc-bookings-date-picker' );
-wp_enqueue_script( 'wc-bookings-time-picker' );
+wp_enqueue_script( 'wc-bookings-booking-form' );
 extract( $field );
 
-$month_before_day = strpos( __( 'F j, Y' ), 'F' ) < strpos( __( 'F j, Y' ), 'j' );
+$month_before_day = strpos( __( 'F j, Y', 'woocommerce-bookings' ), 'F' ) < strpos( __( 'F j, Y', 'woocommerce-bookings' ), 'j' );
 ?>
 <fieldset class="wc-bookings-date-picker <?php echo implode( ' ', $class ); ?>">
-	<legend>
-		<span class="label"><?php echo $label; ?></span>: <small class="wc-bookings-date-picker-choose-date"><?php _e( 'Choose...', 'woocommerce-bookings' ); ?></small>
-	</legend>
-	<div class="picker" data-display="<?php echo $display; ?>" data-availability="<?php echo esc_attr( json_encode( $availability_rules ) ); ?>" data-default-availability="<?php echo $default_availability ? 'true' : 'false'; ?>" data-fully-booked-days="<?php echo esc_attr( json_encode( $fully_booked_days ) ); ?>" data-unavailable-days="<?php echo esc_attr( json_encode( $unavailable_days ) ); ?>" data-partially-booked-days="<?php echo esc_attr( json_encode( $partially_booked_days ) ); ?>" data-restricted-days="<?php echo esc_attr( json_encode( $restricted_days ) ); ?>" data-min_date="<?php echo ! empty( $min_date_js ) ? $min_date_js : 0; ?>" data-max_date="<?php echo $max_date_js; ?>" data-default_date="<?php echo esc_attr( $default_date ); ?>"></div>
+	<p class="wc-bookings-date-picker-timezone-block" style="<?php echo 'no' === WC_Bookings_Timezone_Settings::get( 'display_timezone' ) ? 'display:none' : '' ?>" align="center">
+		<?php esc_html_e( 'Times are in ', 'woocommerce-bookings' ); ?>
+		<span class="wc-bookings-date-picker-timezone"><?php echo str_replace( '_', ' ', wc_booking_get_timezone_string() ); ?></span>
+	</p>
+	<div class="picker" data-display="<?php echo $display; ?>" data-default-availability="<?php echo $default_availability ? 'true' : 'false'; ?>" data-min_date="<?php echo ! empty( $min_date_js ) ? $min_date_js : 0; ?>" data-max_date="<?php echo $max_date_js; ?>" data-default_date="<?php echo esc_attr( $default_date ); ?>"></div>
 	<div class="wc-bookings-date-picker-date-fields">
 		<?php
 		// woocommerce_bookings_mdy_format filter to choose between month/day/year and day/month/year format
 		if ( $month_before_day && apply_filters( 'woocommerce_bookings_mdy_format', true ) ) :
-		?>
+			?>
 		<label>
 			<input type="text" name="<?php echo $name; ?>_month" placeholder="<?php _e( 'mm', 'woocommerce-bookings' ); ?>" size="2" class="required_for_calculation booking_date_month" />
 			<span><?php _e( 'Month', 'woocommerce-bookings' ); ?></span>
@@ -59,9 +59,19 @@ $month_before_day = strpos( __( 'F j, Y' ), 'F' ) < strpos( __( 'F j, Y' ), 'j' 
 	</div>
 </fieldset>
 <div class="form-field form-field-wide">
-	<label for="<?php echo $name; ?>"><?php _e( 'Time', 'woocommerce-bookings' ); ?>:</label>
-	<ul class="block-picker">
-		<li><?php _e( 'Choose a date above to see available times.', 'woocommerce-bookings' ); ?></li>
-	</ul>
+	<?php if ( 'customer' === $product->get_duration_type() ) {
+	?>
+		<div class="block-picker wc-bookings-time-block-picker">
+			<p><?php esc_html_e( 'Choose a date above to see available times.', 'woocommerce-bookings' ); ?></p>
+		</div>
+		<input type="hidden" name="wc_bookings_field_duration" value="" class="wc_bookings_field_duration" />
+	<?php } else { ?>
+		<ul class="block-picker">
+			<li><?php esc_html_e( 'Choose a date above to see available times.', 'woocommerce-bookings' ); ?></li>
+		</ul>
+	<?php } ?>
 	<input type="hidden" class="required_for_calculation" name="<?php echo $name; ?>_time" id="<?php echo $name; ?>" />
+</div>
+<div class="timezone-details" style="display: none;">
+	<input type="hidden" name="<?php echo esc_attr( $name ); ?>_local_timezone" />
 </div>

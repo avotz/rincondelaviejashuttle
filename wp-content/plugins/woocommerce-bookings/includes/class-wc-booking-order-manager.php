@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * Handles order status transitions and keeps bookings in sync
@@ -20,6 +17,9 @@ class WC_Booking_Order_Manager {
 	 */
 	public function __construct() {
 		add_action( 'woocommerce_order_item_meta_end', array( $this, 'booking_display' ), 10, 3 );
+		// WooCommerce PIP compatibility
+		add_action( 'wc_pip_order_item_meta_end', array( $this, 'booking_display' ), 10, 3 );
+
 		// Add a "My Bookings" area to the My Account page
 		add_action( 'init', array( $this, 'add_endpoint' ) );
 		add_filter( 'query_vars', array( $this, 'add_query_vars' ), 0 );
@@ -207,8 +207,8 @@ class WC_Booking_Order_Manager {
 	 *
 	 * @param int $current_page
 	 *
-	 * @since    1.8.0
-	 * @version  1.10.8
+	 * @since 1.8.0
+	 * @since 1.13.0 Added Today's Bookings to My Account.
 	 */
 	public function my_bookings( $current_page = 0 ) {
 		$user_id      = get_current_user_id();
@@ -217,9 +217,18 @@ class WC_Booking_Order_Manager {
 		if ( version_compare( WC()->version, '2.6.0', '>=' ) ) {
 			$bookings_per_page = apply_filters( 'woocommerce_bookings_my_bookings_per_page', 10 );
 
+			$today_bookings = WC_Bookings_Controller::get_bookings_for_user( $user_id, apply_filters( 'woocommerce_bookings_my_bookings_today_query_args', array(
+				'order_by'       => apply_filters( 'woocommerce_bookings_my_bookings_today_order_by', 'start_date' ),
+				'order'          => 'ASC',
+				'date_after'     => current_time( 'timestamp' ),
+				'date_before'    => strtotime( 'tomorrow', current_time( 'timestamp' ) ),
+				'offset'         => ( $current_page - 1 ) * $bookings_per_page,
+				'limit'          => $bookings_per_page,
+			) ) );
+
 			$past_bookings = WC_Bookings_Controller::get_bookings_for_user( $user_id, apply_filters( 'woocommerce_bookings_my_bookings_past_query_args', array(
 				'order_by'       => apply_filters( 'woocommerce_bookings_my_bookings_past_order_by', 'start_date' ),
-				'order'          => 'ASC',
+				'order'          => 'DESC',
 				'date_before'    => current_time( 'timestamp' ),
 				'offset'         => ( $current_page - 1 ) * $bookings_per_page,
 				'limit'          => $bookings_per_page,
@@ -228,12 +237,18 @@ class WC_Booking_Order_Manager {
 			$upcoming_bookings = WC_Bookings_Controller::get_bookings_for_user( $user_id, apply_filters( 'woocommerce_bookings_my_bookings_upcoming_query_args', array(
 				'order_by'       => apply_filters( 'woocommerce_bookings_my_bookings_upcoming_order_by', 'start_date' ),
 				'order'          => 'ASC',
-				'date_after'     => current_time( 'timestamp' ),
+				'date_after'     => strtotime( 'tomorrow', current_time( 'timestamp' ) ),
 				'offset'         => ( $current_page - 1 ) * $bookings_per_page,
 				'limit'          => $bookings_per_page,
 			) ) );
 
 			$tables = array();
+			if ( ! empty( $today_bookings ) ) {
+				$tables['today'] = array(
+					'header'   => __( 'Today\'s Bookings', 'woocommerce-bookings' ),
+					'bookings' => $today_bookings,
+				);
+			}
 			if ( ! empty( $upcoming_bookings ) ) {
 				$tables['upcoming'] = array(
 					'header'   => __( 'Upcoming Bookings', 'woocommerce-bookings' ),
@@ -644,7 +659,7 @@ class WC_Booking_Order_Manager {
 	public function attach_new_user( $booking_id, $booking ) {
 		if ( 0 === $booking->get_customer_id() && get_current_user_id() > 0 ) {
 			$booking->set_customer_id( get_current_user_id() );
-			$booking->save();
+			$booking->save( false );
 		}
 	}
 
@@ -739,7 +754,12 @@ class WC_Booking_Order_Manager {
 		if ( empty( $booking_ids ) ) {
 			return;
 		}
-		$args = array( 'order_id' => $order_id, 'booking_ids' => $booking_ids );
+
+		$args = array(
+			'order_id'    => $order_id,
+			'booking_ids' => $booking_ids,
+		);
+
 		$timestamp = apply_filters( 'woocommerce_bookings_failed_order_expire_scheduled_time_stamp', current_time( 'timestamp' ) + ( 7 * DAY_IN_SECONDS ) );
 		wp_schedule_single_event( $timestamp, 'woocommerce_bookings_failed_order_expired', $args );
 	}
@@ -767,5 +787,3 @@ class WC_Booking_Order_Manager {
 		}
 	}
 }
-
-new WC_Booking_Order_Manager();

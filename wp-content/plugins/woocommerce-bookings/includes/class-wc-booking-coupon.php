@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
 
 /**
  * WC_Booking_Coupon class.
@@ -29,8 +26,11 @@ class WC_Booking_Coupon {
 	public function __construct() {
 		add_filter( 'woocommerce_coupon_discount_types', array( $this, 'add_coupon_type' ) );
 		add_filter( 'woocommerce_coupon_is_valid', array( $this, 'is_coupon_valid' ), 10, 2 );
-		add_filter( 'woocommerce_get_discounted_price', array( $this, 'apply_discount' ), 10, 3 );
-		add_filter( 'woocommerce_coupon_discount_amount_html', array( $this, 'discount_amount_html' ), 10, 2 );
+		if ( version_compare( WC_VERSION, '3.4.0', '<' ) ) {
+			add_filter( 'woocommerce_get_discounted_price', array( $this, 'apply_discount' ), 10, 3 );
+		} else {
+			add_filter( 'woocommerce_coupon_custom_discounts_array', array( $this, 'coupon_custom_discounts' ), 10, 5 );
+		}
 	}
 
 	/**
@@ -83,7 +83,7 @@ class WC_Booking_Coupon {
 		$product_id = is_callable( array( $cart_item['data'], 'get_id' ) ) ? $cart_item['data']->get_id() : $cart_item['data']->id;
 		$product    = wc_get_product( $product_id );
 
-		if ( ! $product->is_type( 'booking' ) ) {
+		if ( ! $product || ! $product->is_type( 'booking' ) ) {
 			return $original_price;
 		}
 
@@ -125,20 +125,58 @@ class WC_Booking_Coupon {
 	}
 
 	/**
-	 * The formatted string of how much we saved per coupon code.
+	 * Calculate discount for specific cart item and coupon,
+	 * by multiplying person types by coupon discount amount.
 	 *
-	 * @param string    $discount_html Discount HTML
-	 * @param WC_Coupon $coupon        Coupon object
-	 *
-	 * @return string Discount HTML
+	 * @param array     $cart_item  Cart item
+	 * @param WC_Coupon $coupon     Coupon
+	 * @return float Discount amount
 	 */
-	public function discount_amount_html( $discount_html, $coupon ) {
-		if ( 'booking_person' !== self::get_coupon_prop( $coupon, 'discount_type' ) ) {
-			return $discount_html;
+	protected function get_discount( $cart_item, $coupon ) {
+		$product_id = is_callable( array( $cart_item['data'], 'get_id' ) ) ? $cart_item['data']->get_id() : $cart_item['data']->id;
+		$product    = wc_get_product( $product_id );
+
+		if ( ! $product->is_type( 'booking' ) ) {
+			return 0;
 		}
 
-		$discount_html = '-' . wc_price( $this->amounts[ self::get_coupon_prop( $coupon, 'code' ) ] );
-		return $discount_html;
+		if ( ! $coupon->is_valid() ) {
+			return 0;
+		}
+
+		if ( 'booking_person' !== self::get_coupon_prop( $coupon, 'discount_type' ) ) {
+			return 0;
+		}
+
+		$discount_amount = self::get_coupon_prop( $coupon, 'amount' );
+		$total_persons   = array_sum( $cart_item['booking']['_persons'] );
+		$discount_amount = $discount_amount * $total_persons;
+
+		return $discount_amount * 100;
+	}
+
+	/**
+	 * Get coupon discount amount
+	 *
+	 * @param  array $discounts
+	 * @param  WC_Coupon $coupon
+	 * @return float
+	 */
+	public function coupon_custom_discounts( $discounts, $coupon ) {
+		if ( 'booking_person' !== self::get_coupon_prop( $coupon, 'discount_type' ) ) {
+			return $discounts;
+		}
+
+		foreach ( WC()->cart->cart_contents as $key => $cart_item ) {
+			if ( ! isset( $discounts[ $coupon->get_code() ][ $key ] ) ) {
+				$discounts[ $key ] = 0;
+			}
+
+			$discounts[ $key ] += $this->get_discount( $cart_item, $coupon );
+			$this->amounts[ $coupon->get_code() ] = $discounts[ $key ] / 100;
+		}
+
+		return $discounts;
 	}
 
 	/**
@@ -158,5 +196,3 @@ class WC_Booking_Coupon {
 	}
 
 }
-
-new WC_Booking_Coupon();

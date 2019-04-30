@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * WC_Booking_Cart_Manager class.
@@ -41,6 +38,9 @@ class WC_Booking_Cart_Manager {
 		if ( get_option( 'woocommerce_cart_redirect_after_add' ) === 'yes' ) {
 			add_filter( 'woocommerce_add_to_cart_redirect', array( $this, 'add_to_cart_redirect' ) );
 		}
+
+		add_action( 'woocommerce_system_status_tool_executed', array( $this, 'maybe_remove_active_cart_sessions' ), 10 );
+		add_action( 'woocommerce_rest_insert_system_status_tool', array( $this, 'maybe_remove_active_cart_sessions' ), 10 );
 
 		$this->id = 'wc_booking_cart_manager';
 
@@ -279,11 +279,12 @@ class WC_Booking_Cart_Manager {
 	private function create_booking_from_cart_data( $cart_item_meta, $product_id, $status = 'in-cart' ) {
 		// Create the new booking
 		$new_booking_data = array(
-			'product_id'    => $product_id, // Booking ID
-			'cost'          => $cart_item_meta['booking']['_cost'], // Cost of this booking
-			'start_date'    => $cart_item_meta['booking']['_start_date'],
-			'end_date'      => $cart_item_meta['booking']['_end_date'],
-			'all_day'       => $cart_item_meta['booking']['_all_day'],
+			'product_id'     => $product_id, // Booking ID
+			'cost'           => $cart_item_meta['booking']['_cost'], // Cost of this booking
+			'start_date'     => $cart_item_meta['booking']['_start_date'],
+			'end_date'       => $cart_item_meta['booking']['_end_date'],
+			'all_day'        => $cart_item_meta['booking']['_all_day'],
+			'local_timezone' => $cart_item_meta['booking']['_local_timezone'],
 		);
 
 		// Check if the booking has resources
@@ -310,17 +311,39 @@ class WC_Booking_Cart_Manager {
 	 * @return array meta
 	 */
 	public function get_item_data( $other_data, $cart_item ) {
-		if ( ! empty( $cart_item['booking'] ) ) {
-			foreach ( $cart_item['booking'] as $key => $value ) {
-				if ( substr( $key, 0, 1 ) !== '_' ) {
-					$other_data[] = array(
-						'name'    => get_wc_booking_data_label( $key, $cart_item['data'] ),
-						'value'   => $value,
-						'display' => '',
-					);
+		if ( empty( $cart_item['booking'] ) ) {
+			return $other_data;
+		}
+
+		if ( ! empty( $cart_item['booking']['_booking_id'] ) ) {
+			$booking = get_wc_booking( $cart_item['booking']['_booking_id'] );
+			if ( wc_should_convert_timezone( $booking ) ) {
+				$timezone_data = array(
+					'name'    => get_wc_booking_data_label( 'timezone', $cart_item['data'] ),
+					'value'   => str_replace( '_', ' ', $booking->get_local_timezone() ),
+					'display' => '',
+				);
+				if ( isset( $cart_item['booking']['time'] ) ) {
+					$cart_item['booking']['time'] = date_i18n( get_option( 'time_format' ), $booking->get_start( 'view', true ) );
 				}
 			}
 		}
+
+		foreach ( $cart_item['booking'] as $key => $value ) {
+			if ( substr( $key, 0, 1 ) !== '_' ) {
+				$other_data[] = array(
+					'name'    => get_wc_booking_data_label( $key, $cart_item['data'] ),
+					'value'   => $value,
+					'display' => '',
+				);
+			}
+		}
+
+		if ( ! empty( $timezone_data ) ) {
+			// Add timezone to the end.
+			$other_data[] = $timezone_data;
+		}
+
 		return $other_data;
 	}
 
@@ -378,11 +401,14 @@ class WC_Booking_Cart_Manager {
 	 */
 	public function add_to_cart_redirect( $url ) {
 		if ( isset( $_REQUEST['add-to-cart'] ) && is_numeric( $_REQUEST['add-to-cart'] ) && wc_booking_requires_confirmation( intval( $_REQUEST['add-to-cart'] ) ) ) {
-			// Remove add to cart messages.
-			wc_clear_notices();
+			// Remove add to cart messages only in case there's no error.
+			$notices = wc_get_notices();
+			if ( empty( $notices['error'] ) ) {
+				wc_clear_notices();
 
-			// Go to checkout.
-			return wc_get_cart_url();
+				// Go to checkout.
+				return wc_get_cart_url();
+			}
 		}
 
 		return $url;
@@ -428,6 +454,16 @@ class WC_Booking_Cart_Manager {
 
 		return $passed;
 	}
+
+	/**
+	 * Check to see if we should remove all In Cart bookings.
+	 *
+	 * @param  array $tool  The system tool that is being run.
+	 */
+	public function maybe_remove_active_cart_sessions( $tool ) {
+		if ( 'clear_sessions' === $tool['id'] && $tool['success'] ) {
+			WC_Bookings_Tools::remove_in_cart_bookings( 'all' );
+		}
+	}
 }
 
-new WC_Booking_Cart_Manager();

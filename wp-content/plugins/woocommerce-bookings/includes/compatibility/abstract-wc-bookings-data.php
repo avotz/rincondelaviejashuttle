@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 
@@ -145,7 +142,7 @@ if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 		 * @return string Data in JSON format.
 		 */
 		public function __toString() {
-			return json_encode( $this->get_data() );
+			return wp_json_encode( $this->get_data() );
 		}
 
 		/**
@@ -543,6 +540,45 @@ if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 				}
 			}
 			return $value;
+		}
+
+
+		/**
+		 * Sets a date prop whilst handling formatting and datetime objects.
+		 *
+		 * @since 3.0.0
+		 * @param string         $prop Name of prop to set.
+		 * @param string|integer $value Value of the prop.
+		 */
+		protected function set_date_prop( $prop, $value ) {
+			try {
+				if ( empty( $value ) ) {
+					$this->set_prop( $prop, null );
+					return;
+				}
+				if ( is_a( $value, 'WC_DateTime' ) ) {
+					$datetime = $value;
+				} elseif ( is_numeric( $value ) ) {
+					// Timestamps are handled as UTC timestamps in all cases.
+					$datetime = new WC_DateTime( "@{$value}", new DateTimeZone( 'UTC' ) );
+				} else {
+					// Strings are defined in local WP timezone. Convert to UTC.
+					if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $value, $date_bits ) ) {
+						$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
+						$timestamp = gmmktime( $date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1] ) - $offset;
+					} else {
+						$timestamp = wc_string_to_timestamp( get_gmt_from_date( gmdate( 'Y-m-d H:i:s', wc_string_to_timestamp( $value ) ) ) );
+					}
+					$datetime  = new WC_DateTime( "@{$timestamp}", new DateTimeZone( 'UTC' ) );
+				}
+				// Set local timezone or offset.
+				if ( get_option( 'timezone_string' ) ) {
+					$datetime->setTimezone( new DateTimeZone( wc_timezone_string() ) );
+				} else {
+					$datetime->set_utc_offset( wc_timezone_offset() );
+				}
+				$this->set_prop( $prop, $datetime );
+			} catch ( Exception $e ) {} // @codingStandardsIgnoreLine.
 		}
 
 		/**

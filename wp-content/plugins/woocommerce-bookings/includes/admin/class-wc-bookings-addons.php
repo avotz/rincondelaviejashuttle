@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * Booking Addons Screen.
@@ -20,10 +17,9 @@ class WC_Bookings_Admin_Add_Ons {
 	 */
 	public function add_section( $sections ) {
 		$sections['bookings'] = new stdClass;
-		$sections['bookings']->title = wc_clean( __( 'Bookings', 'woocommerce-bookings' ) );
-		$sections['bookings']->endpoint = 'http://d3t0oesq8995hv.cloudfront.net/bookings-addons.json';
+		$sections['bookings']->slug = wc_clean( __( 'bookings-extensions', 'woocommerce-bookings' ) );
+		$sections['bookings']->label = wc_clean( __( 'Bookings Addons', 'woocommerce-bookings' ) );
 		return $sections;
 	}
 }
 
-new WC_Bookings_Admin_Add_Ons();

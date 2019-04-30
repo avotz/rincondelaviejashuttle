@@ -35,7 +35,13 @@ class WC_Bookings_Create {
 				}
 
 				if ( 'existing' === $booking_order ) {
-					$order_id      = absint( $_POST['booking_order_id'] );
+
+					if ( class_exists( 'WC_Seq_Order_Number_Pro' ) ) {
+						$order_id = WC_Seq_Order_Number_Pro::find_order_by_order_number( wc_clean( $_POST['booking_order_id'] ) );
+					} else {
+						$order_id = absint( $_POST['booking_order_id'] );
+					}
+
 					$booking_order = $order_id;
 
 					if ( ! $booking_order || get_post_type( $booking_order ) !== 'shop_order' ) {
@@ -63,7 +69,11 @@ class WC_Bookings_Create {
 				if ( 'yes' === get_option( 'woocommerce_prices_include_tax' ) ) {
 					$base_tax_rates = WC_Tax::get_base_tax_rates( $product->get_tax_class() );
 					$base_taxes     = WC_Tax::calc_tax( $booking_cost, $base_tax_rates, true );
-					$booking_cost   = round( $booking_cost - array_sum( $base_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+					$booking_cost   = $booking_cost - array_sum( $base_taxes );
+
+					if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+						$booking_cost = round( $booking_cost, absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+					}
 				}
 
 				$props = array(
@@ -113,28 +123,29 @@ class WC_Bookings_Create {
 						throw new Exception( __( 'Error: Could not create item', 'woocommerce-bookings' ) );
 					}
 
-					// set order address
-					$order = wc_get_order( $order_id );
-					$keys  = array(
-						'first_name',
-						'last_name',
-						'company',
-						'address_1',
-						'address_2',
-						'city',
-						'state',
-						'postcode',
-						'country',
-					);
-					$types = array( 'shipping', 'billing' );
+					if ( ! empty( $customer_id ) ) {
+						$order = wc_get_order( $order_id );
+						$keys  = array(
+							'first_name',
+							'last_name',
+							'company',
+							'address_1',
+							'address_2',
+							'city',
+							'state',
+							'postcode',
+							'country',
+						);
+						$types = array( 'shipping', 'billing' );
 
-					foreach ( $types as $type ) {
-						$address = array();
+						foreach ( $types as $type ) {
+							$address = array();
 
-						foreach ( $keys as $key ) {
-							$address[ $key ] = (string) get_user_meta( $customer_id, $type . '_' . $key, true );
+							foreach ( $keys as $key ) {
+								$address[ $key ] = (string) get_user_meta( $customer_id, $type . '_' . $key, true );
+							}
+							$order->set_address( $address, $type );
 						}
-						$order->set_address( $address, $type );
 					}
 
 					// Add line item meta

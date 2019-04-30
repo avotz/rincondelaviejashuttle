@@ -1,9 +1,5 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
-
 /**
  * Handle frontend forms
  */
@@ -52,4 +48,3 @@ class WC_Booking_Form_Handler {
 	}
 }
 
-WC_Booking_Form_Handler::init();

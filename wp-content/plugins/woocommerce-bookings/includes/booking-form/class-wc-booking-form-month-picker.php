@@ -2,9 +2,6 @@
 /**
  * Class dependencies
  */
-if ( ! class_exists( 'WC_Booking_Form_Picker' ) ) {
-	include_once( 'class-wc-booking-form-picker.php' );
-}
 
 /**
  * Month Picker class
@@ -36,6 +33,10 @@ class WC_Booking_Form_Month_Picker extends WC_Booking_Form_Picker {
 				$this->args['availability_rules'][ $resource->ID ] = $this->booking_form->product->get_availability_rules( $resource->ID );
 			}
 		}
+
+		$fully_booked_blocks = $this->find_fully_booked_blocks();
+
+		$this->args = array_merge( $this->args, $fully_booked_blocks );
 	}
 
 	/**
@@ -59,6 +60,17 @@ class WC_Booking_Form_Month_Picker extends WC_Booking_Form_Picker {
 		$to = strtotime( date( 'Y-m-t', strtotime( "+{$max_date['value']} {$max_date['unit']}" ) ) );
 
 		return $this->booking_form->product->get_blocks_in_range( $from, $to );
+	}
+
+	/**
+	 * Finds months which are fully booked already so they can be blocked on the date picker
+	 */
+	protected function find_fully_booked_blocks() {
+		$booked = WC_Bookings_Controller::find_booked_month_blocks( $this->booking_form->product->get_id() );
+
+		return array(
+			'fully_booked_months' => $booked['fully_booked_months'],
+		);
 	}
 }
 

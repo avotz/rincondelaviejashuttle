@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * Bookings ajax callbacks.
@@ -22,6 +19,8 @@ class WC_Bookings_Ajax {
 		add_action( 'wp_ajax_nopriv_wc_bookings_calculate_costs', array( $this, 'calculate_costs' ) );
 		add_action( 'wp_ajax_wc_bookings_get_blocks', array( $this, 'get_time_blocks_for_date' ) );
 		add_action( 'wp_ajax_nopriv_wc_bookings_get_blocks', array( $this, 'get_time_blocks_for_date' ) );
+		add_action( 'wp_ajax_wc_bookings_get_end_time_html', array( $this, 'get_end_time_html' ) );
+		add_action( 'wp_ajax_nopriv_wc_bookings_get_end_time_html', array( $this, 'get_end_time_html' ) );
 		add_action( 'wp_ajax_wc_bookings_json_search_order', array( $this, 'json_search_order' ) );
 	}
 
@@ -138,6 +137,7 @@ class WC_Bookings_Ajax {
 		}
 
 		wp_safe_redirect( wp_get_referer() );
+		die();
 	}
 
 	/**
@@ -157,7 +157,7 @@ class WC_Bookings_Ajax {
 		if ( ! $product ) {
 			wp_send_json( array(
 				'result' => 'ERROR',
-				'html'   => '<span class="booking-error">' . __( 'This booking is unavailable.', 'woocommerce-bookings' ) . '</span>',
+				'html'   => apply_filters( 'woocommerce_bookings_calculated_booking_cost_error_output', '<span class="booking-error">' . __( 'This booking is unavailable.', 'woocommerce-bookings' ) . '</span>', null, null ),
 			) );
 		}
 
@@ -167,7 +167,7 @@ class WC_Bookings_Ajax {
 		if ( is_wp_error( $cost ) ) {
 			wp_send_json( array(
 				'result' => 'ERROR',
-				'html'   => '<span class="booking-error">' . $cost->get_error_message() . '</span>',
+				'html'   => apply_filters( 'woocommerce_bookings_calculated_booking_cost_error_output', '<span class="booking-error">' . $cost->get_error_message() . '</span>', $cost, $product ),
 			) );
 		}
 
@@ -193,9 +193,13 @@ class WC_Bookings_Ajax {
 			$price_suffix = $product->get_price_suffix();
 		}
 
+		// Build the output
+		$output = apply_filters( 'woocommerce_bookings_booking_cost_string', __( 'Booking cost', 'woocommerce-bookings' ), $product ) . ': <strong>' . wc_price( $display_price ) . $price_suffix . '</strong>';
+
+		// Send the output
 		wp_send_json( array(
 			'result' => 'SUCCESS',
-			'html'   => apply_filters( 'woocommerce_bookings_booking_cost_string', __( 'Booking cost', 'woocommerce-bookings' ), $product ) . ': <strong>' . wc_price( $display_price ) . $price_suffix . '</strong>',
+			'html'   => apply_filters( 'woocommerce_bookings_calculated_booking_cost_success_output', $output, $display_price, $product ),
 		) );
 	}
 
@@ -230,18 +234,30 @@ class WC_Bookings_Ajax {
 		}
 
 		if ( ! empty( $posted['wc_bookings_field_duration'] ) ) {
-			// If we make it into this block we do not want $interval to be multiplied by 60 minutes
-			// as it was already modified by wc_bookings_get_time_slots in wc-bookings-functions.php
 			$interval = (int) $posted['wc_bookings_field_duration'] * $product->get_duration();
 		} else {
-			$interval = ( 'hour' === $product->get_duration_unit() ) ? $product->get_duration() * 60 : $product->get_duration();
+			$interval = $product->get_duration();
 		}
 
-		$base_interval = ( 'hour' === $product->get_duration_unit() )  ? $product->get_duration() * 60 : $product->get_duration();
+		$base_interval = $product->get_duration();
+
+		if ( 'hour' === $product->get_duration_unit() ) {
+			$interval      = $interval * 60;
+			$base_interval = $base_interval * 60;
+		}
 
 		$first_block_time     = $product->get_first_block_time();
 		$from                 = strtotime( $first_block_time ? $first_block_time : 'midnight', $timestamp );
-		$to                   = strtotime( '+ 1 day', $from ) + $interval;
+		$standard_from        = $from;
+
+		// Get an extra day before/after so front-end can get enough blocks to fill out 24 hours in client time.
+		if ( isset( $posted['get_prev_day'] ) ) {
+			$from = strtotime( '- 1 day', $from );
+		}
+		$to = strtotime( '+ 1 day', $standard_from ) + $interval;
+		if ( isset( $posted['get_next_day'] ) ) {
+			$to = strtotime( '+ 1 day', $to );
+		}
 
 		// cap the upper range
 		$to                   = strtotime( 'midnight', $to ) - 1;
@@ -266,6 +282,31 @@ class WC_Bookings_Ajax {
 		}
 
 		die( $block_html );
+	}
+
+	/**
+	 * Gets the end time html dropdown.
+	 *
+	 * @since 1.13.0
+	 * @return HTML
+	 */
+	public function get_end_time_html() {
+		$nonce = $_POST['security'];
+
+		if ( ! wp_verify_nonce( $nonce, 'get_end_time_html' ) ) {
+			// This nonce is not valid.
+			wp_die( __( 'Cheatin&#8217; huh?', 'woocommerce-bookings' ) );
+		}
+
+		$start_date_time  = wc_clean( $_POST['start_date_time'] );
+		$product_id       = intval( $_POST['product_id'] );
+		$blocks           = wc_clean( $_POST['blocks'] );
+		$bookable_product = wc_get_product( $product_id );
+
+		$html = wc_bookings_get_end_time_html( $bookable_product, $blocks, $start_date_time );
+
+		echo $html;
+		exit;
 	}
 
 	/**
@@ -305,5 +346,3 @@ class WC_Bookings_Ajax {
 		wp_send_json( $found_orders );
 	}
 }
-
-new WC_Bookings_Ajax();

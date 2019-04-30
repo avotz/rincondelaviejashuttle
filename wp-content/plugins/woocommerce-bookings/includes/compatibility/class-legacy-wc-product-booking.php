@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * Class for the booking product type.
@@ -227,7 +224,7 @@ class Legacy_WC_Product_Booking extends WC_Product {
 	 * @return string Data in JSON format.
 	 */
 	public function __toString() {
-		return json_encode( $this->get_data() );
+		return wp_json_encode( $this->get_data() );
 	}
 
 	/**

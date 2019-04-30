@@ -1,13 +1,9 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * WC_Bookings_Menus.
  */
 class WC_Bookings_Menus {
-
 	/**
 	 * Constructor.
 	 */
@@ -18,6 +14,7 @@ class WC_Bookings_Menus {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ), 49 );
 		add_filter( 'menu_order', array( $this, 'menu_order' ), 20 );
 		add_filter( 'admin_url', array( $this, 'add_new_booking_url' ), 10, 2 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'booking_form_styles' ) );
 	}
 
 	/**
@@ -73,7 +70,7 @@ class WC_Bookings_Menus {
 		$create_booking_page = add_submenu_page( 'edit.php?post_type=wc_booking', __( 'Add Booking', 'woocommerce-bookings' ), __( 'Add Booking', 'woocommerce-bookings' ), 'manage_bookings', 'create_booking', array( $this, 'create_booking_page' ) );
 		$calendar_page       = add_submenu_page( 'edit.php?post_type=wc_booking', __( 'Calendar', 'woocommerce-bookings' ), __( 'Calendar', 'woocommerce-bookings' ), 'manage_bookings', 'booking_calendar', array( $this, 'calendar_page' ) );
 		$notification_page   = add_submenu_page( 'edit.php?post_type=wc_booking', __( 'Send Notification', 'woocommerce-bookings' ), __( 'Send Notification', 'woocommerce-bookings' ), 'manage_bookings', 'booking_notification', array( $this, 'notifications_page' ) );
-		$settings_page       = add_submenu_page( 'edit.php?post_type=wc_booking', __( 'Global Availability', 'woocommerce-bookings' ), __( 'Global Availability', 'woocommerce-bookings' ), 'manage_bookings', 'wc_bookings_global_availability', array( $this, 'global_availability_page' ) );
+		$settings_page       = add_submenu_page( 'edit.php?post_type=wc_booking', __( 'Settings', 'woocommerce-bookings' ), __( 'Settings', 'woocommerce-bookings' ), 'manage_woocommerce', 'wc_bookings_settings', array( $this, 'settings_page' ) );
 
 		// Add action for screen options on this new page
 		add_action( 'admin_print_scripts-' . $create_booking_page, array( $this, 'create_booking_page_scripts' ) );
@@ -84,8 +81,12 @@ class WC_Bookings_Menus {
 	 * Create booking scripts.
 	 */
 	public function create_booking_page_scripts() {
-		global $wc_bookings;
-		$wc_bookings->booking_form_styles();
+		global $wp_scripts;
+
+		$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.11.4';
+
+		wp_enqueue_style( 'jquery-ui-style', '//ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_version . '/themes/smoothness/jquery-ui.min.css' );
+		wp_enqueue_style( 'wc-bookings-styles', WC_BOOKINGS_PLUGIN_URL . '/dist/css/frontend.css', null, WC_BOOKINGS_VERSION );
 	}
 
 	/**
@@ -101,7 +102,15 @@ class WC_Bookings_Menus {
 	 * calendar_page_scripts.
 	 */
 	public function calendar_page_scripts() {
+		global $wp_version;
+
 		wp_enqueue_script( 'jquery-ui-datepicker' );
+		wp_enqueue_style( 'wc_bookings_admin_calendar_css' );
+		wp_enqueue_script( 'wc_bookings_admin_calendar_js' );
+
+		if ( WC_BOOKINGS_GUTENBERG_EXISTS ) {
+			wp_enqueue_script( 'wc_bookings_admin_calendar_gutenberg_js' );
+		}
 	}
 
 	/**
@@ -167,13 +176,26 @@ class WC_Bookings_Menus {
 	/**
 	 * Output the global availability page.
 	 */
-	public function global_availability_page() {
-		global $wpdb;
+	public function settings_page() {
+		wp_enqueue_script( 'wc_bookings_admin_js' );
 
-		wp_enqueue_script( 'wc_bookings_writepanel_js' );
-		wp_enqueue_script( 'wc_bookings_settings_js' );
-
-		$current_tab = isset( $_GET['tab'] ) ? sanitize_title( $_GET['tab'] ) : 'availability';
+		$tabs_metadata = array(
+			'availability' => array(
+				'name'          => __( 'Global Availability', 'woocommerce-bookings' ),
+				'href'          => admin_url( 'edit.php?post_type=wc_booking&page=wc_bookings_settings&tab=availability' ),
+				'generate_html' => function() { include( 'views/html-global-availability-settings.php' ); },
+			),
+			'timezones' => array(
+				'name'          => __( 'Timezones', 'woocommerce-bookings' ),
+				'href'          => admin_url( 'edit.php?post_type=wc_booking&page=wc_bookings_settings&tab=timezones' ),
+				'generate_html' => function() { WC_Bookings_Timezone_Settings::generate_form_html(); },
+			),
+			'connection' => array(
+				'name'          => __( 'Calendar Connection', 'woocommerce-bookings' ),
+				'href'          => admin_url( 'edit.php?post_type=wc_booking&page=wc_bookings_settings&tab=connection' ),
+				'generate_html' => function() { WC_Bookings_Google_Calendar_Connection::generate_form_html(); },
+			),
+		);
 
 		include( 'views/html-settings-page.php' );
 	}
@@ -219,5 +241,3 @@ class WC_Bookings_Menus {
 		return $url;
 	}
 }
-
-new WC_Bookings_Menus();

@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php $this->show_errors(); ?>
 
-	<form method="POST">
+	<form method="POST" data-nonce="<?php echo esc_attr( wp_create_nonce( 'find-booked-day-blocks' ) ); ?>">
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
@@ -54,7 +54,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<label>
 								<input type="radio" name="booking_order" value="existing" class="checkbox" />
 								<?php _e( 'Assign this booking to an existing order with this ID:', 'woocommerce-bookings' ); ?>
-								<input type="number" name="booking_order_id" value="" class="text" size="3" style="width: 80px;" />
+								<?php if ( class_exists( 'WC_Seq_Order_Number_Pro' ) ) : ?>
+									<input type="text" name="booking_order_id" value="" class="text" size="15" />
+								<?php else : ?>
+									<input type="number" name="booking_order_id" value="" class="text" size="10" />
+								<?php endif; ?>
 							</label>
 						</p>
 						<p>

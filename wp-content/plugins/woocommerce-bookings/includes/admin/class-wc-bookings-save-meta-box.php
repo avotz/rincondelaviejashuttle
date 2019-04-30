@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * WC_Bookings_Save_Meta_Box.
@@ -66,4 +63,3 @@ class WC_Bookings_Save_Meta_Box {
 		<?php
 	}
 }
-return new WC_Bookings_Save_Meta_Box();

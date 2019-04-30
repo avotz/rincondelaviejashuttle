@@ -1,12 +1,29 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * WC Bookable Product Resource Data Store: Stored in CPT.
  */
 class WC_Product_Booking_Resource_Data_Store_CPT extends WC_Data_Store_WP {
+
+	/**
+	 * Flush transients for all products related to a specific resource.
+	 *
+	 * @param WC_Product_Booking_Resource $resource
+	 */
+	protected function flush_resource_transients( $resource ) {
+		global $wpdb;
+
+		$product_ids = wp_parse_id_list( $wpdb->get_col( $wpdb->prepare( "
+			SELECT product_id
+			FROM {$wpdb->prefix}wc_booking_relationships AS relationships
+			WHERE relationships.resource_id = %d
+			ORDER BY sort_order ASC
+		", $resource->get_id() ) ) );
+
+		foreach ( $product_ids as $product_id ) {
+			delete_booking_slots_transient( $product_id );
+		}
+	}
 
 	/**
 	 * Create resource.
@@ -29,6 +46,7 @@ class WC_Product_Booking_Resource_Data_Store_CPT extends WC_Data_Store_WP {
 			update_post_meta( $id, '_wc_booking_availability', $resource->get_availability() );
 			$resource->apply_changes();
 		}
+		$this->flush_resource_transients( $resource );
 	}
 
 	/**
@@ -65,6 +83,7 @@ class WC_Product_Booking_Resource_Data_Store_CPT extends WC_Data_Store_WP {
 		update_post_meta( $resource->get_id(), '_wc_booking_availability', $resource->get_availability( 'edit' ) );
 
 		$resource->apply_changes();
+		$this->flush_resource_transients( $resource );
 	}
 
 	/**
@@ -74,6 +93,7 @@ class WC_Product_Booking_Resource_Data_Store_CPT extends WC_Data_Store_WP {
 	 * @param array $args Array of args to pass to the delete method.
 	 */
 	public function delete( &$resource, $args = array() ) {
+		$this->flush_resource_transients( $resource );
 		wp_delete_post( $resource->get_id(), true );
 		$resource->set_id( 0 );
 	}

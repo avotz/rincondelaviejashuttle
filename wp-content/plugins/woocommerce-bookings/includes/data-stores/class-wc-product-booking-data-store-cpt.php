@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * WC Bookable Product Data Store: Stored in CPT.
@@ -80,6 +77,7 @@ class WC_Product_Booking_Data_Store_CPT extends WC_Product_Data_Store_CPT {
 			$product->set_regular_price( '' );
 			$product->set_sale_price( '' );
 			$product->set_manage_stock( false );
+			$product->set_stock_status( 'instock' );
 
 			// Set price so filters work.
 			$product->set_price( wc_booking_calculated_base_cost( $product ) );
@@ -118,6 +116,7 @@ class WC_Product_Booking_Data_Store_CPT extends WC_Product_Data_Store_CPT {
 			parent::create( $product );
 		}
 		$this->force_meta_values( $product );
+		delete_booking_slots_transient( $product->get_id() );
 	}
 
 	/**
@@ -148,6 +147,7 @@ class WC_Product_Booking_Data_Store_CPT extends WC_Product_Data_Store_CPT {
 		} else {
 			parent::update( $product );
 		}
+		delete_booking_slots_transient( $product->get_id() );
 	}
 
 	/**

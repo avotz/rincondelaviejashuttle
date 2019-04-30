@@ -27,7 +27,8 @@ if ( $booking->get_order() ) {
 	echo sprintf( __( 'Hello %s', 'woocommerce-bookings' ), ( is_callable( array( $booking->get_order(), 'get_billing_first_name' ) ) ? $booking->get_order()->get_billing_first_name() : $booking->get_order()->billing_first_name ) ) . "\n\n";
 }
 
-echo __( 'This is a reminder that your booking will take place tomorrow. The details of your booking are shown below.', 'woocommerce-bookings' ) . "\n\n";
+/* translators: 1: booking start date */
+echo sprintf( __( 'This is a reminder that your booking will take place on %1$s. The details of your booking are shown below.', 'woocommerce-bookings' ), $booking->get_start_date() ) . "\n\n";
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
@@ -44,9 +45,14 @@ if ( $booking->has_resources() && $resource ) {
 }
 
 /* translators: 1: booking start date */
-echo sprintf( __( 'Booking Start Date: %s', 'woocommerce-bookings' ), $booking->get_start_date() ) . "\n";
+echo sprintf( __( 'Booking Start Date: %s', 'woocommerce-bookings' ), $booking->get_start_date( null, null, wc_should_convert_timezone( $booking ) ) ) . "\n";
 /* translators: 1: booking end date */
-echo sprintf( __( 'Booking End Date: %s', 'woocommerce-bookings' ), $booking->get_end_date() ) . "\n";
+echo sprintf( __( 'Booking End Date: %s', 'woocommerce-bookings' ), $booking->get_end_date( null, null, wc_should_convert_timezone( $booking ) ) ) . "\n";
+
+if ( wc_should_convert_timezone( $booking ) ) {
+	/* translators: 1: time zone */
+	echo sprintf( __( 'Time Zone: %s', 'woocommerce-bookings' ), str_replace( '_', ' ', $booking->get_local_timezone() ) );
+}
 
 if ( $booking->has_persons() ) {
 	foreach ( $booking->get_persons() as $id => $qty ) {

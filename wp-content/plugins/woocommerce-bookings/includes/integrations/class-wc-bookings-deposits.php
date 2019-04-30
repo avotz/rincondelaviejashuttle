@@ -5,10 +5,6 @@
  * @package WooCommerce/Bookings
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
  * Deposits integration class.
  */
@@ -135,9 +131,7 @@ class WC_Bookings_Deposits {
 	 * @param array $statuses to be changed in this function.
 	 */
 	public function add_custom_status( $statuses ) {
-		$statuses['wc-partial-payment'] = __( 'Partially Paid','woocommerce-deposits' );
+		$statuses['wc-partial-payment'] = __( 'Partially Paid','woocommerce-bookings' );
 		return $statuses;
 	}
 }
-
-new WC_Bookings_Deposits();
