@@ -69,6 +69,7 @@
           <li><a href="<?php echo esc_url(home_url('/attractions')); ?>"><i class="fa fa-binoculars"></i> <span>Attractions</span> </a></li>
           <li><a href="<?php echo esc_url(home_url('/maps')); ?>"><i class="fa fa-map"></i> <span>Maps</span> </a></li>
           <li><a href="<?php echo esc_url(home_url('/national-park-facts')); ?>"><i class="fa fa-edit"></i> <span>Park Facts</span> </a></li>
+          <li><a href="<?php echo esc_url(home_url('/news')); ?>"><i class="fa fa-list"></i> <span>News</span> </a></li>
           
       </ul>
     </nav>
