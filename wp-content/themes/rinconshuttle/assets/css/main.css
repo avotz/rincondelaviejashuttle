@@ -2017,7 +2017,8 @@ body.home .header-logo {
   padding-top: 5rem;
 }
 article.page,
-section.error-404 {
+section.error-404,
+.tours-items {
   margin-left: 0;
   padding: 0.5rem 0.5rem 6rem 0.5rem;
   max-width: 700px;
@@ -2025,21 +2026,27 @@ section.error-404 {
 }
 article.page .page-header,
 section.error-404 .page-header,
+.tours-items .page-header,
 article.page .entry-header,
-section.error-404 .entry-header {
+section.error-404 .entry-header,
+.tours-items .entry-header {
   background: #959c1e;
   padding: 1rem 0.5rem;
 }
 article.page .page-header h1,
 section.error-404 .page-header h1,
+.tours-items .page-header h1,
 article.page .entry-header h1,
-section.error-404 .entry-header h1 {
+section.error-404 .entry-header h1,
+.tours-items .entry-header h1 {
   color: #fff;
 }
 article.page .page-content,
 section.error-404 .page-content,
+.tours-items .page-content,
 article.page .entry-content,
-section.error-404 .entry-content {
+section.error-404 .entry-content,
+.tours-items .entry-content {
   background-color: rgba(255,255,255,0.8);
   padding: 0.5rem;
 }
@@ -2055,7 +2062,8 @@ div.product .entry-header h1 {
 }
 @media screen and (min-width: 960px) {
   article.page,
-  section.error-404 {
+  section.error-404,
+  .tours-items {
     width: auto;
     padding: 0.5rem;
     margin-left: 8.5rem;
