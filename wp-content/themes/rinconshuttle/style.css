@@ -2061,6 +2061,212 @@ div.product .entry-header h1 {
     margin-left: 8.5rem;
   }
 }
+.tours-items {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  -o-box-lines: multiple;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -o-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+.tours-item {
+  width: 100%;
+  margin-bottom: 1rem;
+  position: relative;
+  border: 1px solid #e6e6e6;
+  cursor: pointer;
+}
+.tours-item .entry-thumbnail {
+  position: relative;
+}
+.tours-item .entry-thumbnail .more-detail {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.tours-item .entry-thumbnail:before {
+  content: '';
+  background-color: rgba(0,0,0,0.5);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+}
+.tours-item:hover {
+  -webkit-box-shadow: 0 12px 26px rgba(0,0,0,0.1);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.1);
+}
+.tours-item:hover .entry-thumbnail .more-detail {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+}
+.tours-item:hover .entry-thumbnail:before {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+}
+.tours-item img {
+  display: block;
+  height: 190px;
+  width: 100%;
+}
+.tours-item h4 {
+  color: #000;
+  margin-bottom: 0;
+  margin-top: 0;
+  text-align: left;
+  font-size: 14px;
+  line-height: 18px;
+}
+.tours-item h4 a {
+  color: #000;
+}
+.tours-item a {
+  color: #000;
+}
+.tours-item a.button {
+  background-color: #959c1e;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+.tours-item a.button:hover {
+  background-color: verde2;
+}
+.tours-item .entry-content {
+  padding: 0;
+  background-color: transparent;
+}
+.tours-item .tour-title {
+  min-height: 50px;
+}
+.tours-item .price {
+  top: 0;
+  z-index: 99;
+  color: #000;
+  text-align: left;
+  margin-top: 10px;
+}
+.tours-item .price .from {
+  display: block;
+  font-size: 12px;
+  line-height: 0.8;
+  font-weight: normal;
+  color: #707070;
+}
+.tours-item .price span {
+  font-size: 18px;
+  font-weight: bold;
+}
+.tours-item .entry-excerpt {
+  background-color: #fff;
+  color: #000;
+  padding: 12px;
+}
+.tours-item .entry-excerpt-wrapper {
+  padding: 0.5rem;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  -o-box-lines: multiple;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -o-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+.tours-item:hover h4 {
+  background-color: #64b4dc;
+}
+.tours-filters .form-filters-tour {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  -o-box-lines: multiple;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -o-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+.tours-filters .form-filters-tour .form-filters-tour-item {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+@media screen and (min-width: 620px) {
+  .tours-item {
+    width: calc(50% - 15px);
+  }
+  .tours-item img {
+    max-height: 200px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .tours-item {
+    width: calc(33% - 15px);
+  }
+  .tours-filters .form-filters-tour .form-filters-tour-item {
+    width: 33%;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .tours-item {
+    width: calc(25% - 15px);
+  }
+  .tours-filters .form-filters-tour .form-filters-tour-item {
+    width: 33%;
+  }
+}
 .footer {
   position: fixed;
   right: 1rem;

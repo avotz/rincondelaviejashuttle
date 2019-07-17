@@ -70,6 +70,7 @@
           <li><a href="<?php echo esc_url(home_url('/maps')); ?>"><i class="fa fa-map"></i> <span>Maps</span> </a></li>
           <li><a href="<?php echo esc_url(home_url('/national-park-facts')); ?>"><i class="fa fa-edit"></i> <span>Park Facts</span> </a></li>
           <li><a href="<?php echo esc_url(home_url('/news')); ?>"><i class="fa fa-list"></i> <span>News</span> </a></li>
+          <li><a href="<?php echo esc_url(home_url('/zone-info')); ?>"><i class="fa fa-home"></i> <span>Hotels</span> </a></li>
           
       </ul>
     </nav>
