@@ -2098,11 +2098,12 @@ div.product .entry-header h1 {
   border: 1px solid #e6e6e6;
   cursor: pointer;
   margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
-margin-right: .5rem .entry-thumbnail {
+.tours-item .entry-thumbnail {
   position: relative;
 }
-margin-right: .5rem .entry-thumbnail .more-detail {
+.tours-item .entry-thumbnail .more-detail {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -2121,7 +2122,7 @@ margin-right: .5rem .entry-thumbnail .more-detail {
   text-transform: uppercase;
   font-weight: bold;
 }
-margin-right: .5rem .entry-thumbnail:before {
+.tours-item .entry-thumbnail:before {
   content: '';
   background-color: rgba(0,0,0,0.5);
   width: 100%;
@@ -2135,26 +2136,26 @@ margin-right: .5rem .entry-thumbnail:before {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
 }
-margin-right: .5rem:hover {
+.tours-item:hover {
   -webkit-box-shadow: 0 12px 26px rgba(0,0,0,0.1);
   box-shadow: 0 12px 26px rgba(0,0,0,0.1);
 }
-margin-right: .5rem:hover .entry-thumbnail .more-detail {
+.tours-item:hover .entry-thumbnail .more-detail {
   opacity: 1;
   -ms-filter: none;
   filter: none;
 }
-margin-right: .5rem:hover .entry-thumbnail:before {
+.tours-item:hover .entry-thumbnail:before {
   opacity: 1;
   -ms-filter: none;
   filter: none;
 }
-margin-right: .5rem img {
+.tours-item img {
   display: block;
   height: 190px;
   width: 100%;
 }
-margin-right: .5rem h4 {
+.tours-item h4 {
   color: #000;
   margin-bottom: 0;
   margin-top: 0;
@@ -2162,51 +2163,51 @@ margin-right: .5rem h4 {
   font-size: 14px;
   line-height: 18px;
 }
-margin-right: .5rem h4 a {
+.tours-item h4 a {
   color: #000;
 }
-margin-right: .5rem a {
+.tours-item a {
   color: #000;
 }
-margin-right: .5rem a.button {
+.tours-item a.button {
   background-color: #959c1e;
   padding: 0.5rem;
   border-radius: 5px;
 }
-margin-right: .5rem a.button:hover {
+.tours-item a.button:hover {
   background-color: verde2;
 }
-margin-right: .5rem .entry-content {
+.tours-item .entry-content {
   padding: 0;
   background-color: transparent;
 }
-margin-right: .5rem .tour-title {
+.tours-item .tour-title {
   min-height: 50px;
 }
-margin-right: .5rem .price {
+.tours-item .price {
   top: 0;
   z-index: 99;
   color: #000;
   text-align: left;
   margin-top: 10px;
 }
-margin-right: .5rem .price .from {
+.tours-item .price .from {
   display: block;
   font-size: 12px;
   line-height: 0.8;
   font-weight: normal;
   color: #707070;
 }
-margin-right: .5rem .price span {
+.tours-item .price span {
   font-size: 18px;
   font-weight: bold;
 }
-margin-right: .5rem .entry-excerpt {
+.tours-item .entry-excerpt {
   background-color: #fff;
   color: #000;
   padding: 12px;
 }
-margin-right: .5rem .entry-excerpt-wrapper {
+.tours-item .entry-excerpt-wrapper {
   padding: 0.5rem;
   display: -webkit-box;
   display: -moz-box;
@@ -2227,10 +2228,10 @@ margin-right: .5rem .entry-excerpt-wrapper {
   -webkit-justify-content: space-between;
   justify-content: space-between;
 }
-margin-right: .5rem:hover h4 {
+.tours-item:hover h4 {
   background-color: #64b4dc;
 }
--filters .form-filters-tour {
+.tours-filters .form-filters-tour {
   display: -webkit-box;
   display: -moz-box;
   display: -webkit-flex;
@@ -2250,7 +2251,7 @@ margin-right: .5rem:hover h4 {
   -webkit-justify-content: space-between;
   justify-content: space-between;
 }
--filters .form-filters-tour .form-filters-tour-item {
+.tours-filters .form-filters-tour .form-filters-tour-item {
   width: 100%;
   margin-bottom: 1rem;
 }
