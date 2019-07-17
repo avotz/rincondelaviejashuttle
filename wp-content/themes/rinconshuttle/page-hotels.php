@@ -95,7 +95,8 @@ get_header();
 	                                    </div>
 	                                    </div>
 	                                    
-	                                </div>
+                                    </div>
+                                    <a href="<?php the_permalink(); ?>" style="position:absolute;top:0;left:0;right:0;bottom:0;"></a>
 	                            </div>
 	                        </article>
 	                    
