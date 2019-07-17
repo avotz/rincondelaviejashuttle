@@ -2229,7 +2229,7 @@ div.product .entry-header h1 {
   justify-content: space-between;
 }
 .tours-item:hover h4 {
-  background-color: #64b4dc;
+  color: #64b4dc;
 }
 .tours-filters .form-filters-tour {
   display: -webkit-box;
