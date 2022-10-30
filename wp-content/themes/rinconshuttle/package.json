@@ -2,7 +2,7 @@
   "name": "rincondelaviejashuttle",
   "version": "0.0.1",
   "devDependencies": {
-    "browser-sync": "^2.18.13",
+    "browser-sync": "^2.27.10",
     "gulp-uglify": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-strip-debug": "^1.1.0",
